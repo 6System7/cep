@@ -1,7 +1,15 @@
 .navbar-brand {
-	padding-top: 7px;
+    padding-top: 7px;
 }
 
 #navbar-logo {
     max-width: 50px;
+}
+
+#trcAge .slider-selection {
+    background: green;
+}
+
+#trcAgeSelection {
+	color: darkgrey;
 }

@@ -9,10 +9,15 @@
     <!-- Include bootstrap css and javascript -->
     <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
     <script type="text/javascript" src="lib/bootstrap.min.js"></script>
-    <!-- Set meta for bootstrap to enable mobile responsiveness -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Include bootstrap slider by http://seiyria.com/ -->
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-slider.min.css">
+    <script type="text/javascript" src="lib/bootstrap-slider.min.js"></script>
     <!-- Include our own CSS -->
     <link rel="stylesheet" type="text/css" href="index.css">
+    <!-- Include our own JS -->
+    <script type="text/javascript" src="index.js"></script>
+    <!-- Set meta for bootstrap to enable mobile responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -50,13 +55,23 @@
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                                        Filter Group 1
+                                        Basic
                                     </a>
                                 </h4>
                         </div>
                         <div id="collapse1" class="panel-collapse collapse in">
                             <div class="panel-body">
-                                Check boxes here etc...
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">First Name</span>
+                                    <input id="txtFirstName" type="text" class="form-control" placeholder="First Name" aria-describedby="basic-addon1">
+                                </div>
+
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">Last Name</span>
+                                    <input id="txtLastName" type="text" class="form-control" placeholder="Last Name" aria-describedby="basic-addon1">
+                                </div>
+
+                                Age <b>10</b> <input id="trcAge" type="text" class="span2" value="" data-slider-min="10" data-slider-max="100" data-slider-step="1" data-slider-value="[20,50]"/> <b>100</b> <span id="trcAgeSelection"></span>
                             </div>
                         </div>
                     </div>
@@ -71,6 +86,9 @@
                         <div id="collapse2" class="panel-collapse collapse">
                             <div class="panel-body">
                                 Check boxes here etc...
+                                <label class="checkbox-inline"><input type="checkbox" value="">Option 1</label>
+                                <label class="checkbox-inline"><input type="checkbox" value="">Option 2</label>
+                                <label class="checkbox-inline"><input type="checkbox" value="">Option 3</label>
                             </div>
                         </div>
                     </div>
