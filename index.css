@@ -1,15 +1,68 @@
+.navbar{
+    background-color: #7A1211;
+    color: white;
+    
+}
+.navbar #nav > .active > a {
+    color: black;
+    background-color:#ffaa80;
+}
+.nav.navbar-nav li a {
+   color: white;
+ }
+.nav.navbar-nav a:hover {
+ color: green;
+}
 .navbar-brand {
     padding-top: 7px;
+    background-color: #fff2e6;
 }
-
 #navbar-logo {
     max-width: 50px;
+    background-color: #fff2e6;
+}
+#basic-addon1 {
+    background: #ffc299;
 }
 
 #trcAge .slider-selection {
-    background: green;
+    background: #7A1211;
+}
+#trcAgeSelection {
+	color: black;
+}
+body{
+    background-color: #fff2e6;
+}
+.panel {
+    border-color: #7A1211;
+    border-width: 2px;
+}
+.panel-default > .panel-heading {
+    background-color:#ffaa80;  
+}
+.panel-body{
+    background-color: #ffe0cc;
+   
+}
+#pageheader {
+    color: #5C0000;
+}
+.table{
+    border-color: #7A1211;
+    border-width: 2px; 
+    border-radius: 12px;
 }
 
-#trcAgeSelection {
-	color: darkgrey;
+
+#topoftable {
+    background-color: #ffaa80;
+}
+.table-striped>tbody>tr:nth-child(even)>td,
+tr.found{
+    background-color:#ffc299;
+}
+.table-striped>tbody>tr:nth-child(odd)>td,
+tr.found{
+    background-color:#ffe0cc;
 }
