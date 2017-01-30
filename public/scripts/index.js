@@ -5,7 +5,6 @@ $(document).ready(function() {
     });
 
     // Attach age slider label
-    $("#trcAgeSelection").text(slideEvt.value.join(" - "));
     $("#trcAge").on("slide", function(slideEvt) {
         // console.log("Age range selected", slideEvt.value);
         $("#trcAgeSelection").text(slideEvt.value.join(" - "));
