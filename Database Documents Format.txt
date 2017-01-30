@@ -1,0 +1,88 @@
+//PAL document design
+
+{
+	"_id": ObjectId(DEADBEEF0000),
+	"firstname": "name",
+	"surname": "lastname",
+	"dateofbirth":date(),
+	"age": 70,
+	"gender": "M"/"F",
+	"projects": [
+		project1_id,
+		project2_id
+	],
+	"medical info": id,
+	"contact info": id,
+	"further personal info": id
+}
+
+//Further Personal Info document design
+
+{
+	"_id": ObjectId(DEADBEEF0001),
+	"relationship status": "married",
+	"ethnic origin": "white british",
+	"sexual orientation": "",
+	"employment status": "retired",
+	"consent": {
+		"photo": True/False,
+		"data": True/False,
+		"further_contact": True/False,
+		"promotion": True/False,
+		"artwork reproduction/sale": True/False,
+		"detail": "any further detail provided"
+	},
+	"referral": "name",
+	"date registered": date(),
+	"venu": "name"
+}
+
+//Project document design
+
+{
+	"_id": ObjectId(DEADBEEF0002),
+	"project name": "project_name",
+	"status": "project_status"
+}
+
+//Contact Details document design
+
+{
+	"_id": ObjectId(DEADBEEF0003),
+	"address": "street",
+	"postcode": "DH1 3EE",
+	"telephone": "0123456789",
+	"mobile": "0012325423",
+	"email": "example@email.com"
+}
+
+//Medical Info document design
+
+{
+	"_id": ObjectId(DEADBEEF0004),
+	"emergency contact": {
+		"firstname": "name",
+		"surname": "lastname",
+		"relationship": "relation",
+		"telephone": "number"
+	},
+	"gp": id,
+	"disability": True/False,
+	"conditions": [
+		"type": "physical"/"mental health"/"sensory"/"cognitive",
+		"details": "any further details provided"
+	],
+	"extra help": True/False,
+	"carer": "Y"/"N"/"Parttime"/"fulltime"/"N/A"
+}
+
+//GP document design
+
+{
+	"_id": ObjectId(DEADBEEF0005),
+	"firstname": "name",
+	"surname": "name",
+	"practice name": "name",
+	"address": "text",
+	"telephone": "number"
+}
