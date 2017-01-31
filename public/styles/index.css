@@ -11,10 +11,10 @@
 .nav.navbar-nav li a {
     color: white;
 }
-
-.nav.navbar-nav a:hover {
-    color: green;
+.nav.navbar-nav >li> a:hover {
+    color: #ffaa80;
 }
+
 
 .navbar-brand {
     padding-top: 7px;
@@ -23,7 +23,12 @@
 
 #navbar-logo {
     max-width: 50px;
-    /*background-color: #fff2e6;*/
+    background-color: #fff2e6;
+}
+
+
+#navbar-brand:hover{
+    background-color: black;
 }
 
 #basic-addon1 {
