@@ -92,6 +92,7 @@ function applyFilters(dataset) {
     displayPalSet(dataset);
 }
 
+// TODO get dataset from database
 var dataset = {
     pals: [{
         id: 0,
