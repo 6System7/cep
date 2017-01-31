@@ -122,6 +122,7 @@ function matchesFilter(pal, filters) {
     }
     return true;
 }
+
 // TODO get dataset from database
 var dataset = {
     pals: [{
