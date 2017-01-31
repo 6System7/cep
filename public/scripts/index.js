@@ -21,7 +21,7 @@ function displayPalSet(dataset) {
 
     // TODO check what columns to display from filters, save in columnsToShow
     var columnsToShow = [
-        "First Name", "Last Name", "Email"
+        "firstName", "lastName", "email"
     ];
 
     // Generate column headers
@@ -35,27 +35,13 @@ function displayPalSet(dataset) {
     for (var i = 0; i < dataset.pals.length; i++) {
         var row = $("<tr>");
 
-        if ($.inArray("First Name", columnsToShow) > -1) {
-            var firstName = dataset.pals[i].firstName || "not present";
-            var tdFirstName = $("<td>");
-            tdFirstName.text(firstName);
-            row.append(tdFirstName);
+        for (var j = 0; j < columnsToShow.length; j++) {
+            var column = columnsToShow[j];
+            var elem = $("<td>");
+            elem.text(dataset.pals[i][column] || "not present");
+            row.append(elem);
         }
-
-        if ($.inArray("Last Name", columnsToShow) > -1) {
-            var lastName = dataset.pals[i].lastName || "not present";
-            var tdLastName = $("<td>");
-            tdLastName.text(lastName);
-            row.append(tdLastName);
-        }
-
-        if ($.inArray("Email", columnsToShow) > -1) {
-            var email = dataset.pals[i].email || "not present";
-            var tdEmail = $("<td>");
-            tdEmail.text(email);
-            row.append(tdEmail);
-        }
-
+        
         tableBody.append(row);
     }
 }
