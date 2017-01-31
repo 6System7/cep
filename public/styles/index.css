@@ -15,7 +15,6 @@
     color: #ffaa80;
 }
 
-
 .navbar-brand {
     padding-top: 7px;
     background-color: #fff2e6;
@@ -23,12 +22,11 @@
 
 #navbar-logo {
     max-width: 50px;
-    background-color: #fff2e6;
+    /*background-color: #fff2e6;*/
 }
 
-
-#navbar-brand:hover{
-    background-color: black;
+.navbar-brand:hover{
+    background-color: #ffaa80 !important;
 }
 
 #basic-addon1 {
