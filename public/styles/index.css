@@ -93,3 +93,9 @@ body {
 #accordion {
     margin-bottom: 5px;
 }
+
+/* Remove those damn annoying grey lines on the table */
+.table-bordered>thead>tr>th,.table-bordered>tbody>tr>td{
+    border: 0px;
+    border-bottom-width: 0px;
+}
