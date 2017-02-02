@@ -62,10 +62,11 @@ function displayPalSet(dataset, filters = {}) {
                         btn.text("Edit Pal");
                         btn.addClass("btn btn-default");
                         btn.attr("type", "button");
-                        btn.attr("id", dataset.pals[i].id)
+                        btn.data("palJson", dataset.pals[i]);
                         btn.click(function() {
-                            var id = $(this).attr('id');
-                            alert("TODO Edit pal with id: " + id);
+                            var pal = $(this).data("palJson");
+                            // TODO pop-up edit pal window
+                            alert("Edit pal with id: " + pal.id + "\n\nName: " + pal.firstName + " " + pal.lastName + "\nEmail: " + pal.email);
                         });
                         elem.append(btn);
                     }
