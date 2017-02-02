@@ -51,12 +51,27 @@ function displayPalSet(dataset, filters = {}) {
             var row = $("<tr>");
 
             for (var j = 0; j < columns.length; j++) {
-                var column = columns[j].db;
                 var elem = $("<td>");
-                elem.text(dataset.pals[i][column]);
+                if (columns[j].db) {
+                    var column = columns[j].db;
+                    elem.text(dataset.pals[i][column]);
+                } else {
+                    var column = columns[j].nodb;
+                    if (column === "edit") {
+                        var btn = $("<button>");
+                        btn.text("Edit Pal");
+                        btn.addClass("btn btn-default");
+                        btn.attr("type", "button");
+                        btn.attr("id", dataset.pals[i].id)
+                        btn.click(function() {
+                            var id = $(this).attr('id');
+                            alert("TODO Edit pal with id: " + id);
+                        });
+                        elem.append(btn);
+                    }
+                }
                 row.append(elem);
             }
-
             tableBody.append(row);
         }
     }
@@ -92,6 +107,13 @@ function applyFilters(dataset) {
             db: "email",
             hr: chkEmail.value
         });
+    }
+    var chkEdit = $("#chkEdit")[0];
+    if (chkEdit.checked) {
+        columns.push({
+            nodb: "edit",
+            hr: chkEdit.value
+        })
     }
 
     // Load filters
