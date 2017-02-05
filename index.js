@@ -1,0 +1,28 @@
+var express = require('express')
+var mongodb = require('mongodb')
+
+var app = express()
+
+const PUBLIC_DIRECTORY = 'public'
+const PATH_PREFIX = __dirname + '/' + PUBLIC_DIRECTORY
+console.log(PATH_PREFIX)
+
+app.use(express.static(PUBLIC_DIRECTORY))
+
+app.get('/', function(req, res) {
+  res.sendFile(PATH_PREFIX + '/index.html')
+})
+
+app.get('/addPal', function(req, res) {
+  res.sendFile(PATH_PREFIX + '/addPal.html')
+})
+
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('*', function(req, res) {
+  res.status(404).send('uh')
+});
+
+const PORT = 8080;
+app.listen(PORT, function () {
+  console.log('Web Services App listening on port ' + PORT)
+})
