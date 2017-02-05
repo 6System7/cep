@@ -1,0 +1,33 @@
+body {
+    background-color: #fff2e6;
+    margin: 0;
+    padding: 0;
+
+}
+.img-responsive {
+max-width: 90%; /* or to whatever you want here */
+max-height: auto; /* or to whatever you want here */
+}
+
+.input-group-addon {
+    border-color: #7A1211;
+    border-width: 2px;
+    background-color:#ffccb3;
+    
+}
+
+.input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:first-child>.btn-group:not(:first-child)>.btn, .input-group-btn:first-child>.btn:not(:first-child), .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group>.btn, .input-group-btn:last-child>.dropdown-toggle {
+    border-color: #7A1211;
+    border-width: 2px;
+    background-color: #ffccb3;
+    
+}
+
+.input-group-addon-body {
+    background-color: #ffe0cc;
+    color: black;
+}
+
+#lg_remember {
+    color: white;
+}

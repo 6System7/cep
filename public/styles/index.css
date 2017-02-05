@@ -117,3 +117,8 @@ body {
     color: white;
 }
 
+.close {
+    color: white; 
+    opacity: 1;
+}
+
