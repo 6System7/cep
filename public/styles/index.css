@@ -105,3 +105,15 @@ body {
     border: 0px;
     border-bottom-width: 0px;
 }
+
+.modal-header
+ {
+     background-color: #7A1211;
+     color: white;
+ }
+.modal-body
+{ 
+    background-color: #7A1211;
+    color: white;
+}
+

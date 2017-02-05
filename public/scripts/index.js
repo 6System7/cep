@@ -15,6 +15,7 @@ $(document).ready(function() {
     $("#btnUpdate").click(function() {
         applyFilters(dataset);
     });
+ 
 });
 
 function initialiseAgeSlider() {
@@ -76,6 +77,11 @@ function displayPalSet(dataset, filters = {}) {
             tableBody.append(row);
         }
     }
+}
+function addNewPal(){
+    alert("HERE")
+    document.getElementById("addPalIframe").style.display="block";
+ 
 }
 
 function applyFilters(dataset) {
