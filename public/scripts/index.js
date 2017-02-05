@@ -15,7 +15,7 @@ $(document).ready(function() {
     $("#btnUpdate").click(function() {
         applyFilters(dataset);
     });
- 
+
 });
 
 function initialiseAgeSlider() {
@@ -60,14 +60,15 @@ function displayPalSet(dataset, filters = {}) {
                     var column = columns[j].nodb;
                     if (column === "edit") {
                         var btn = $("<button>");
-                        btn.text("Edit Pal");
-                        btn.addClass("btn btn-default");
+                        btn.text("Edit PAL");
+                        btn.addClass("btn btn-default btn-sm");
                         btn.attr("type", "button");
                         btn.data("palJson", dataset.pals[i]);
+                        btn.attr("data-toggle", "modal");
+                        btn.attr("data-target", "#myModal");
                         btn.click(function() {
                             var pal = $(this).data("palJson");
-                            // TODO pop-up edit pal window
-                            alert("Edit pal with id: " + pal.id + "\n\nName: " + pal.firstName + " " + pal.lastName + "\nEmail: " + pal.email);
+                            window.frames["addPalIframe"].editPal(pal);
                         });
                         elem.append(btn);
                     }
@@ -78,10 +79,10 @@ function displayPalSet(dataset, filters = {}) {
         }
     }
 }
+
 function addNewPal(){
     alert("HERE")
     document.getElementById("addPalIframe").style.display="block";
- 
 }
 
 function applyFilters(dataset) {
@@ -149,6 +150,7 @@ function matchesFilter(pal, filters) {
     if (filters.lastname && !pal.lastName.toLowerCase().includes(filters.lastname.toLowerCase())) {
         return false;
     }
+    // TODO add more filters
     return true;
 }
 

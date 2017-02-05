@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="lib/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
         <script type="text/javascript" src="lib/bootstrap.min.js"></script>
         <style>
@@ -12,12 +13,18 @@
                 color: rgb(255,0,255);
             }
         </style>
-    
+        <script type="text/javascript">
+            function editPal(pal) {
+                $("#firstName").text(pal.firstName);
+                $("#lastName").text(pal.lastName);
+                $("#email").text(pal.email);
+            }
+        </script>
     </head>
     <body>
     <div class="container">
         <br>
-      
+
         <form>
             <div class="form-group">
               <label for="firstName">First Name:</label>
@@ -31,12 +38,9 @@
               <label for="email">Email:</label>
               <input type="email" class="form-control" id="email" placeholder="Enter email">
             </div>
-                   
+
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
-        
-   
-    
     </div>
     </body>
 </html>
