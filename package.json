@@ -18,6 +18,7 @@
   "homepage": "https://github.com/6System7/cep#readme",
   "dependencies": {
     "express": "^4.14.1",
-    "mongodb": "^2.2.22"
+    "mongodb": "^2.2.22",
+    "nodemon": "^1.11.0"
   }
 }

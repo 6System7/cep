@@ -13,12 +13,13 @@ app.get('/', function(req, res) {
   res.sendFile(PATH_PREFIX + '/index.html')
 })
 
-app.get('/addPal', function(req, res) {
-  res.sendFile(PATH_PREFIX + '/addPal.html')
+app.get('/login', function(req, res) {
+  res.sendFile(PATH_PREFIX + '/login.html')
 })
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
+  console.log(req)
   res.status(404).send('uh')
 });
 
