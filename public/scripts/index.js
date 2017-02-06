@@ -43,6 +43,13 @@ function displayPalSet(dataset, filters = {}) {
     for (var i = 0; i < columns.length; i++) {
         var tdColumnHeader = $("<th>");
         tdColumnHeader.text(columns[i].hr);
+        if (columns[i].db) {
+            tdColumnHeader.data("db", columns[i].db);
+            tdColumnHeader.click(function() {
+                var db = $(this).data("db");
+                sortByColumn(dataset, db);
+            });
+        }
         tableHeadRow.append(tdColumnHeader);
     }
 
@@ -80,9 +87,9 @@ function displayPalSet(dataset, filters = {}) {
     }
 }
 
-function addNewPal(){
+function addNewPal() {
     alert("HERE")
-    document.getElementById("addPalIframe").style.display="block";
+    document.getElementById("addPalIframe").style.display = "block";
 }
 
 function applyFilters(dataset) {
@@ -152,6 +159,19 @@ function matchesFilter(pal, filters) {
     }
     // TODO add more filters
     return true;
+}
+
+function sortByColumn(dataset, db) {
+    dataset.pals.sort(function(a, b) {
+        if (a[db] < b[db]) {
+            return -1;
+        } else if (a[db] > b[db]) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+    applyFilters(dataset);
 }
 
 // TODO get dataset from database
