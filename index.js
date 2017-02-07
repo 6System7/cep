@@ -5,7 +5,7 @@ var app = express()
 
 const PUBLIC_DIRECTORY = 'public'
 const PATH_PREFIX = __dirname + '/' + PUBLIC_DIRECTORY
-console.log(PATH_PREFIX)
+// console.log(PATH_PREFIX)
 
 app.use(express.static(PUBLIC_DIRECTORY))
 
@@ -19,7 +19,7 @@ app.get('/login', function(req, res) {
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
-  console.log(req)
+  // console.log(req)
   res.status(404).send('uh')
 });
 
