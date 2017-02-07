@@ -5,94 +5,109 @@ var columns;
 var minAge = 10,
     maxAge = 50;
 
-$(document).ready(function() {
+$(document).ready(function () {
     initialiseAgeSlider();
 
     // Generate table
-    applyFilters(dataset);
+    refreshTable(dataset);
 
     // Attach search button callback
-    $("#btnUpdate").click(function() {
-        applyFilters(dataset);
+    $("#btnUpdate").click(function () {
+        refreshTable(dataset);
     });
 
+    window.closeModal = function () {
+        $('#myModal').modal('hide');
+    }
 });
 
 function initialiseAgeSlider() {
+    var sliderElement = $("#trcAge");
+
     // Create age slider
-    $("#trcAge").slider({
+    sliderElement.slider({
         id: "trcAge"
         // tooltip: "always"
     });
 
     // Attach age slider label
-    $("#trcAge").on("slide", function(slideEvt) {
+    sliderElement.on("slide", function (slideEvt) {
         minAge = slideEvt.value[0];
         maxAge = slideEvt.value[1];
         $("#trcAgeSelection").text(slideEvt.value.join(" - "));
     });
 }
 
-function displayPalSet(dataset, filters = {}) {
+function generateRows(tableBody) {
+    tableBody.empty();
+    for (var palIndex = 0; palIndex < filteredDataset.pals.length; palIndex++) {
+        var row = $("<tr>");
+
+        for (var columnIndex = 0; columnIndex < columns.length; columnIndex++) {
+            var elem = $("<td>");
+            if (columns[columnIndex].db) {
+                var column = columns[columnIndex].db;
+                elem.text(filteredDataset.pals[palIndex][column]);
+            } else {
+                var column = columns[columnIndex].nodb;
+                if (column === "edit") {
+                    var btn = $("<button>");
+                    btn.text("Edit PAL");
+                    btn.addClass("btn btn-default btn-sm");
+                    btn.attr("type", "button");
+                    btn.data("palJson", filteredDataset.pals[palIndex]);
+                    btn.attr("data-toggle", "modal");
+                    btn.attr("data-target", "#myModal");
+                    btn.click(function () {
+                        var pal = $(this).data("palJson");
+                        window.frames["addPalIframe"].editPal(pal);
+                    });
+                    elem.append(btn);
+                }
+            }
+            row.append(elem);
+        }
+        tableBody.append(row);
+    }
+}
+function refreshTableWithFilters(chosenDataset, filters = {}) {
     var tableHeadRow = $("#tHeadPalsRow");
     var tableBody = $("#tBodyPals");
     tableHeadRow.empty();
-    tableBody.empty();
 
     // Generate column headers
-    for (var i = 0; i < columns.length; i++) {
+    for (var columnIndex = 0; columnIndex < columns.length; columnIndex++) {
         var tdColumnHeader = $("<th>");
-        tdColumnHeader.text(columns[i].hr);
-        if (columns[i].db) {
-            tdColumnHeader.data("db", columns[i].db);
-            tdColumnHeader.click(function() {
+        tdColumnHeader.addClass("hover-show-arrow");
+        tdColumnHeader.text(columns[columnIndex].hr);
+        if (columns[columnIndex].db) {
+            // Create arrow to show column is sortable (only shown on hover)
+            var arrow = $("<div>");
+            arrow.addClass("arrow-up");
+            tdColumnHeader.append(arrow);
+            tdColumnHeader.data("db", columns[columnIndex].db);
+            tdColumnHeader.click(function () {
                 var db = $(this).data("db");
-                sortByColumn(dataset, db);
+                // Sort by column and regenerate rows (done by sort method)
+                sortByColumn(filteredDataset, db);
             });
         }
         tableHeadRow.append(tdColumnHeader);
     }
 
-    // Generate rows
-    for (var i = 0; i < dataset.pals.length; i++) {
-        if (matchesFilter(dataset.pals[i], filters)) {
-            var row = $("<tr>");
-
-            for (var j = 0; j < columns.length; j++) {
-                var elem = $("<td>");
-                if (columns[j].db) {
-                    var column = columns[j].db;
-                    elem.text(dataset.pals[i][column]);
-                } else {
-                    var column = columns[j].nodb;
-                    if (column === "edit") {
-                        var btn = $("<button>");
-                        btn.text("Edit PAL");
-                        btn.addClass("btn btn-default btn-sm");
-                        btn.attr("type", "button");
-                        btn.data("palJson", dataset.pals[i]);
-                        btn.attr("data-toggle", "modal");
-                        btn.attr("data-target", "#myModal");
-                        btn.click(function() {
-                            var pal = $(this).data("palJson");
-                            window.frames["addPalIframe"].editPal(pal);
-                        });
-                        elem.append(btn);
-                    }
-                }
-                row.append(elem);
-            }
-            tableBody.append(row);
+    // Generate filtered dataset (Stored separately for report generation to access filtered and full dataset
+    filteredDataset.pals = [];
+    for (var palIndex = 0; palIndex < chosenDataset.pals.length; palIndex++) {
+        if (matchesFilters(chosenDataset.pals[palIndex], filters)) {
+            filteredDataset.pals.push(chosenDataset.pals[palIndex]);
         }
     }
+
+    // Generate rows
+    generateRows(tableBody);
 }
 
-function addNewPal() {
-    alert("HERE")
-    document.getElementById("addPalIframe").style.display = "block";
-}
-
-function applyFilters(dataset) {
+function refreshTable(chosenDataset) {
     // Load columns
     columns = [];
     var chkId = $("#chkID")[0];
@@ -147,10 +162,10 @@ function applyFilters(dataset) {
     filters.minAge = minAge;
     filters.maxAge = maxAge;
 
-    displayPalSet(dataset, filters);
+    refreshTableWithFilters(chosenDataset, filters);
 }
 
-function matchesFilter(pal, filters) {
+function matchesFilters(pal, filters) {
     if (filters.firstname && !pal.firstName.toLowerCase().includes(filters.firstname.toLowerCase())) {
         return false;
     }
@@ -161,8 +176,8 @@ function matchesFilter(pal, filters) {
     return true;
 }
 
-function sortByColumn(dataset, db) {
-    dataset.pals.sort(function(a, b) {
+function sortByColumn(chosenDataset, db) {
+    chosenDataset.pals.sort(function (a, b) {
         if (a[db] < b[db]) {
             return -1;
         } else if (a[db] > b[db]) {
@@ -171,7 +186,9 @@ function sortByColumn(dataset, db) {
             return 0;
         }
     });
-    applyFilters(dataset);
+
+    // Regenerate rows of table after sorting
+    generateRows($("#tBodyPals"));
 }
 
 // TODO get dataset from database
@@ -194,7 +211,6 @@ var dataset = {
     }]
 };
 
-window.closeModal = function(){
-
-    $('#myModal').modal('hide');
-}
+var filteredDataset = {
+    pals: []
+};
