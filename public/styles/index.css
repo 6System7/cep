@@ -3,7 +3,7 @@
     color: white;
 }
 
-.navbar #nav > .active > a {
+.navbar #nav>.active>a {
     color: black;
     background-color: #ffaa80;
 }
@@ -12,7 +12,7 @@
     color: white;
 }
 
-.nav.navbar-nav > li > a:hover {
+.nav.navbar-nav>li>a:hover {
     color: #ffaa80;
 }
 
@@ -57,7 +57,7 @@ body {
     border-width: 2px;
 }
 
-.panel-default > .panel-heading {
+.panel-default>.panel-heading {
     background-color: #ffaa80;
 }
 
@@ -80,11 +80,11 @@ body {
     background-color: #ffaa80;
 }
 
-.table-striped > tbody > tr:nth-child(even) > td, tr.found {
+.table-striped>tbody>tr:nth-child(even)>td, tr.found {
     background-color: #ffc299;
 }
 
-.table-striped > tbody > tr:nth-child(odd) > td, tr.found {
+.table-striped>tbody>tr:nth-child(odd)>td, tr.found {
     background-color: #ffe0cc;
 }
 
@@ -101,8 +101,10 @@ body {
     margin-bottom: 5px;
 }
 
+
 /* Remove those damn annoying grey lines on the table */
-.table-bordered > thead > tr > th, .table-bordered > tbody > tr > td {
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>td {
     border: 0px;
     border-bottom-width: 0px;
 }
@@ -122,20 +124,37 @@ body {
     opacity: 1;
 }
 
-.hover-show-arrow:hover .arrow-up {
+.hover-show-arrow:hover .arrow-container {
     display: inline-block;
 }
 
-.hover-show-arrow:hover {
+.hover-show-arrow:hover {}
+
+.arrow-container {
+    display: none;
+    padding: 0;
+    margin-left: 5px;
+}
+
+.arrow-up:hover, .arrow-down:hover {
     cursor: pointer;
 }
 
 .arrow-up {
-    display: none;
+    display: block;
     width: 0;
     height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 5px solid black;
-    margin-left: 5px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid black;
+    margin-bottom: 2px;
+}
+
+.arrow-down {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid black;
 }

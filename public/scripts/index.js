@@ -81,16 +81,26 @@ function refreshTableWithFilters(chosenDataset, filters = {}) {
         tdColumnHeader.addClass("hover-show-arrow");
         tdColumnHeader.text(columns[columnIndex].hr);
         if (columns[columnIndex].db) {
-            // Create arrow to show column is sortable (only shown on hover)
-            var arrow = $("<div>");
-            arrow.addClass("arrow-up");
-            tdColumnHeader.append(arrow);
-            tdColumnHeader.data("db", columns[columnIndex].db);
-            tdColumnHeader.click(function () {
+            // Create arrows to show column is sortable (only shown on hover)
+            var arrowContainer = $("<div>");
+            arrowContainer.addClass("arrow-container");
+            var arrowUp = $("<div>");
+            arrowUp.addClass("arrow-up");
+            arrowUp.data("db", columns[columnIndex].db);
+            var arrowDown = $("<div>");
+            arrowDown.addClass("arrow-down");
+            arrowDown.data("db", columns[columnIndex].db);
+            arrowUp.click(function () {
                 var db = $(this).data("db");
-                // Sort by column and regenerate rows (done by sort method)
                 sortByColumn(filteredDataset, db);
             });
+            arrowDown.click(function () {
+                var db = $(this).data("db");
+                sortByColumn(filteredDataset, db, -1);
+            });
+            arrowContainer.append(arrowUp);
+            arrowContainer.append(arrowDown);
+            tdColumnHeader.append(arrowContainer);
         }
         tableHeadRow.append(tdColumnHeader);
     }
@@ -176,12 +186,13 @@ function matchesFilters(pal, filters) {
     return true;
 }
 
-function sortByColumn(chosenDataset, db) {
+function sortByColumn(chosenDataset, db, modifier = 1) {
+    // modifier is used to switch between ascending/descending
     chosenDataset.pals.sort(function (a, b) {
         if (a[db] < b[db]) {
-            return -1;
+            return -1 * modifier;
         } else if (a[db] > b[db]) {
-            return 1;
+            return 1 * modifier;
         } else {
             return 0;
         }
