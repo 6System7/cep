@@ -193,3 +193,8 @@ var dataset = {
         email: "john@doe.zz.vc"
     }]
 };
+
+window.closeModal = function(){
+
+    $('#myModal').modal('hide');
+}
