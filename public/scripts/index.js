@@ -46,7 +46,8 @@ function initialiseAgeSlider() {
     });
 }
 
-function generateRows(tableBody) {
+function generateRows() {
+    var tableBody = $("#tBodyPals");
     tableBody.empty();
     for (var palIndex = 0; palIndex < filteredDataset.pals.length; palIndex++) {
         var row = $("<tr>");
@@ -82,7 +83,6 @@ function generateRows(tableBody) {
 
 function refreshTableWithFilters(chosenDataset, filters = {}) {
     var tableHeadRow = $("#tHeadPalsRow");
-    var tableBody = $("#tBodyPals");
     tableHeadRow.empty();
 
     // Generate column headers
@@ -124,7 +124,7 @@ function refreshTableWithFilters(chosenDataset, filters = {}) {
     }
 
     // Generate rows
-    generateRows(tableBody);
+    generateRows();
 }
 
 function refreshTable(chosenDataset) {
@@ -209,7 +209,7 @@ function sortByColumn(chosenDataset, db, modifier = 1) {
     });
 
     // Regenerate rows of table after sorting
-    generateRows($("#tBodyPals"));
+    generateRows();
 }
 
 function alterOrAddPal(pal) {
