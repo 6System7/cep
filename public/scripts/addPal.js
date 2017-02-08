@@ -7,13 +7,18 @@ function editPal(pal) {
 
 function getPalFromInputs() {
     var pal = $("#palStore").data("pal");
+    if (!pal) {
+        // Adding, not editing, so saved object is just null/undefined
+        pal = {};
+        // TODO find an id here?
+    }
     pal.firstName = $("#firstName").val();
     pal.lastName = $("#lastName").val();
     pal.email = $("#email").val();
     return pal;
 }
 
-function submitFunc(){
+function submitFunc() {
     // TODO send new/altered pal info to server
     window.parent.alterOrAddPal(getPalFromInputs());
     window.parent.closeModal();

@@ -205,25 +205,20 @@ function sortByColumn(chosenDataset, db, modifier = 1) {
 
 function alterOrAddPal(pal) {
     if (pal.hasOwnProperty("id")) {
-        var updated = false;
         for (var i = 0; i < dataset.pals.length; i++) {
             if (dataset.pals[i].id && dataset.pals[i].id === pal.id) {
                 // If same pal, update them
                 dataset.pals[i] = pal;
-                updated = true;
                 // Stop checking (IDs are unique)
                 break;
             }
         }
-        if (!updated) {
-            // If reached this point, pal is not already in dataset, add them
-            dataset.pals.push(pal);
-        }
-        // Now regenerate rows to show new info
-        generateRows($("#tBodyPals"));
     } else {
-        console.log("Cannot add or update a pal with no id!");
+        dataset.pals.push(pal);
+        console.log("No ID found, let database generate one for new pal");
     }
+    // Now regenerate rows to show new info
+    refreshTable(dataset);
 }
 
 // TODO get dataset from database
