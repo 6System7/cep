@@ -5,18 +5,18 @@ var columns;
 var minAge = 10,
     maxAge = 50;
 
-$(document).ready(function () {
+$(document).ready(function() {
     initialiseAgeSlider();
 
     // Generate table
     refreshTable(dataset);
 
     // Attach search button callback
-    $("#btnUpdate").click(function () {
+    $("#btnUpdate").click(function() {
         refreshTable(dataset);
     });
 
-    window.closeModal = function () {
+    window.closeModal = function() {
         $('#myModal').modal('hide');
     }
 });
@@ -31,7 +31,7 @@ function initialiseAgeSlider() {
     });
 
     // Attach age slider label
-    sliderElement.on("slide", function (slideEvt) {
+    sliderElement.on("slide", function(slideEvt) {
         minAge = slideEvt.value[0];
         maxAge = slideEvt.value[1];
         $("#trcAgeSelection").text(slideEvt.value.join(" - "));
@@ -58,7 +58,7 @@ function generateRows(tableBody) {
                     btn.data("palJson", filteredDataset.pals[palIndex]);
                     btn.attr("data-toggle", "modal");
                     btn.attr("data-target", "#myModal");
-                    btn.click(function () {
+                    btn.click(function() {
                         var pal = $(this).data("palJson");
                         window.frames["addPalIframe"].editPal(pal);
                     });
@@ -70,6 +70,7 @@ function generateRows(tableBody) {
         tableBody.append(row);
     }
 }
+
 function refreshTableWithFilters(chosenDataset, filters = {}) {
     var tableHeadRow = $("#tHeadPalsRow");
     var tableBody = $("#tBodyPals");
@@ -90,11 +91,11 @@ function refreshTableWithFilters(chosenDataset, filters = {}) {
             var arrowDown = $("<div>");
             arrowDown.addClass("arrow-down");
             arrowDown.data("db", columns[columnIndex].db);
-            arrowUp.click(function () {
+            arrowUp.click(function() {
                 var db = $(this).data("db");
                 sortByColumn(filteredDataset, db);
             });
-            arrowDown.click(function () {
+            arrowDown.click(function() {
                 var db = $(this).data("db");
                 sortByColumn(filteredDataset, db, -1);
             });
@@ -188,7 +189,7 @@ function matchesFilters(pal, filters) {
 
 function sortByColumn(chosenDataset, db, modifier = 1) {
     // modifier is used to switch between ascending/descending
-    chosenDataset.pals.sort(function (a, b) {
+    chosenDataset.pals.sort(function(a, b) {
         if (a[db] < b[db]) {
             return -1 * modifier;
         } else if (a[db] > b[db]) {
@@ -200,6 +201,29 @@ function sortByColumn(chosenDataset, db, modifier = 1) {
 
     // Regenerate rows of table after sorting
     generateRows($("#tBodyPals"));
+}
+
+function alterOrAddPal(pal) {
+    if (pal.hasOwnProperty("id")) {
+        var updated = false;
+        for (var i = 0; i < dataset.pals.length; i++) {
+            if (dataset.pals[i].id && dataset.pals[i].id === pal.id) {
+                // If same pal, update them
+                dataset.pals[i] = pal;
+                updated = true;
+                // Stop checking (IDs are unique)
+                break;
+            }
+        }
+        if (!updated) {
+            // If reached this point, pal is not already in dataset, add them
+            dataset.pals.push(pal);
+        }
+        // Now regenerate rows to show new info
+        generateRows($("#tBodyPals"));
+    } else {
+        console.log("Cannot add or update a pal with no id!");
+    }
 }
 
 // TODO get dataset from database
