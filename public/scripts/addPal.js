@@ -3,6 +3,8 @@ function editPal(pal) {
     $("#firstName").val(pal.firstName);
     $("#lastName").val(pal.lastName);
     $("#email").val(pal.email);
+
+    $("#firstName").focus();
 }
 
 function getPalFromInputs() {
@@ -10,7 +12,6 @@ function getPalFromInputs() {
     if (!pal) {
         // Adding, not editing, so saved object is just null/undefined
         pal = {};
-        // TODO find an id here?
     }
     pal.firstName = $("#firstName").val();
     pal.lastName = $("#lastName").val();
@@ -18,8 +19,15 @@ function getPalFromInputs() {
     return pal;
 }
 
+function clearInputs() {
+    $(":input").val("");
+}
+
 function submitFunc() {
-    // TODO send new/altered pal info to server
     window.parent.alterOrAddPal(getPalFromInputs());
+    // Clear inputs on closing, erase saved pal - LEAVE NO TRACE
+    clearInputs();
+    $("#palStore").data("pal", null);
+    // Close self
     window.parent.closeModal();
 }

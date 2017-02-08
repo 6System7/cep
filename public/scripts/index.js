@@ -214,9 +214,13 @@ function alterOrAddPal(pal) {
             }
         }
     } else {
-        dataset.pals.push(pal);
         console.log("No ID found, let database generate one for new pal");
+        /* Pal NEEDS an ID for adding/editing to work properly TODO make id come from database auto-gen (send updated pal to server, wait for pal back with ID?)*/
+        pal.id = (new Date()).getTime();
+        dataset.pals.push(pal);
     }
+    // TODO send new/altered pal info to server
+
     // Now regenerate rows to show new info
     refreshTable(dataset);
 }
