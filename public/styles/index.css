@@ -162,3 +162,15 @@ body {
 #query-filters {
     margin-bottom: 10px;
 }
+
+.checkbox-group {
+    background-color: #fff2e6;
+    padding: 3px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    border-radius: 4px;
+}
+
+.checkbox-group label em {
+    text-decoration: underline;
+}
