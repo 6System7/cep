@@ -26,6 +26,13 @@ $(document).ready(function() {
         // Ensure inputs are cleared (they get cleared on submit, not on 'Cross' click to exit)
         window.frames["addPalIframe"].clearInputs();
     });
+    $("#checkAllPersonal").change(function () {
+    $("#personalDataCheckboxes input:checkbox").prop('checked', $(this).prop("checked"));
+});
+
+$("#checkAllOther").change(function () {
+    $("#othercheckboxes input:checkbox").prop('checked', $(this).prop("checked"));
+});
 
 });
 
@@ -257,3 +264,4 @@ var dataset = {
 var filteredDataset = {
     pals: []
 };
+
