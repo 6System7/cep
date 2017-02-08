@@ -19,6 +19,14 @@ $(document).ready(function() {
     window.closeModal = function() {
         $('#myModal').modal('hide');
     }
+
+    // Dynamically change title
+    $("#addPalBtn").click(function() {
+        $("#addEditFormTitle").text("Add a new PAL");
+        // Ensure inputs are cleared (they get cleared on submit, not on 'Cross' click to exit)
+        window.frames["addPalIframe"].clearInputs();
+    });
+
 });
 
 function initialiseAgeSlider() {
@@ -61,6 +69,7 @@ function generateRows(tableBody) {
                     btn.click(function() {
                         var pal = $(this).data("palJson");
                         window.frames["addPalIframe"].editPal(pal);
+                        $("#addEditFormTitle").text("Edit a PAL");
                     });
                     elem.append(btn);
                 }
