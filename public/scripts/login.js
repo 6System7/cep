@@ -42,10 +42,20 @@ function empty(){
     if (x == ""){
         alert("false");
         return false;
-    };
+    }
     else if(y = ""){
         alert("false");
         return false;
-    };
-        
     }
+   
+    };
+$(function() {
+  $('form').submit(function(){
+      
+          window.location.replace("index.html");
+          
+
+    
+    return false;
+  }  );
+});
