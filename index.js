@@ -1,11 +1,12 @@
 var express = require('express')
 var mongodb = require('mongodb')
+var passport = require('passport')
+var passportHTTP = require('passport-http')
 
 var app = express()
 
 const PUBLIC_DIRECTORY = 'public'
 const PATH_PREFIX = __dirname + '/' + PUBLIC_DIRECTORY
-console.log(PATH_PREFIX)
 
 app.use(express.static(PUBLIC_DIRECTORY))
 
