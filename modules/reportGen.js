@@ -18,9 +18,11 @@ function genPDF(reportData, graphs){
     var columns = reportData.columns;
     var filters = reportData.filters;
     var filteredDatabase = reportData.filteredDatabase;
+    var today = new Date();
 
     var docDefinition = {
         content: [
+            {text: 'Report ' + today.getDate() + "/" + (today.getMonth()+1) + "/" + today.getFullYear(), style: 'header', alignment: "center", fontSize: 18, bold: true},
             {text: 'Filtered Table', style: 'header', alignment: "center", fontSize: 14, bold: true},
             filteredTable(filteredDatabase, columns, filters),
             {text: '\n\nFilters applied', style: 'header', fontSize: 14, bold: true},
