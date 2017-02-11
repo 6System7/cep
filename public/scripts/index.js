@@ -9,83 +9,133 @@ $(document).ready(function() {
     initialiseAgeSlider();
 
     // Generate table
-    applyFilters(dataset);
+    refreshTable(dataset);
 
     // Attach search button callback
     $("#btnUpdate").click(function() {
-        applyFilters(dataset);
+        refreshTable(dataset);
+    });
+
+    window.closeModal = function() {
+        $('#myModal').modal('hide');
+    }
+
+    // Dynamically change title
+    $("#addPalBtn").click(function() {
+        $("#addEditFormTitle").text("Add a new PAL");
+        // Ensure inputs are cleared (they get cleared on submit, not on 'Cross' click to exit)
+        window.frames["addPalIframe"].clearInputs();
+    });
+    
+    $("#checkAllPersonal").change(function() {
+        $("#personalDataCheckboxes input:checkbox").prop('checked', $(this).prop("checked"));
+    });
+
+    $("#checkAllOther").change(function() {
+        $("#othercheckboxes input:checkbox").prop('checked', $(this).prop("checked"));
     });
 
 });
 
 function initialiseAgeSlider() {
+    var sliderElement = $("#trcAge");
+
     // Create age slider
-    $("#trcAge").slider({
+    sliderElement.slider({
         id: "trcAge"
         // tooltip: "always"
     });
 
     // Attach age slider label
-    $("#trcAge").on("slide", function(slideEvt) {
+    sliderElement.on("slide", function(slideEvt) {
         minAge = slideEvt.value[0];
         maxAge = slideEvt.value[1];
         $("#trcAgeSelection").text(slideEvt.value.join(" - "));
     });
 }
 
-function displayPalSet(dataset, filters = {}) {
-    var tableHeadRow = $("#tHeadPalsRow");
+function generateRows() {
     var tableBody = $("#tBodyPals");
-    tableHeadRow.empty();
     tableBody.empty();
+    for (var palIndex = 0; palIndex < filteredDataset.pals.length; palIndex++) {
+        var row = $("<tr>");
+
+        for (var columnIndex = 0; columnIndex < columns.length; columnIndex++) {
+            var elem = $("<td>");
+            if (columns[columnIndex].db) {
+                var column = columns[columnIndex].db;
+                elem.text(filteredDataset.pals[palIndex][column]);
+            } else {
+                var column = columns[columnIndex].nodb;
+                if (column === "edit") {
+                    var btn = $("<button>");
+                    btn.text("Edit PAL");
+                    btn.addClass("btn btn-default btn-sm");
+                    btn.attr("type", "button");
+                    btn.data("palJson", filteredDataset.pals[palIndex]);
+                    btn.attr("data-toggle", "modal");
+                    btn.attr("data-target", "#myModal");
+                    btn.click(function() {
+                        var pal = $(this).data("palJson");
+                        window.frames["addPalIframe"].editPal(pal);
+                        $("#addEditFormTitle").text("Edit a PAL");
+                    });
+                    elem.append(btn);
+                }
+            }
+            row.append(elem);
+        }
+        tableBody.append(row);
+    }
+}
+
+function refreshTableWithFilters(chosenDataset, filters = {}) {
+    var tableHeadRow = $("#tHeadPalsRow");
+    tableHeadRow.empty();
 
     // Generate column headers
-    for (var i = 0; i < columns.length; i++) {
+    for (var columnIndex = 0; columnIndex < columns.length; columnIndex++) {
         var tdColumnHeader = $("<th>");
-        tdColumnHeader.text(columns[i].hr);
+        tdColumnHeader.addClass("hover-show-arrow");
+        tdColumnHeader.text(columns[columnIndex].hr);
+        if (columns[columnIndex].db) {
+            // Create arrows to show column is sortable (only shown on hover)
+            var arrowContainer = $("<div>");
+            arrowContainer.addClass("arrow-container");
+            var arrowUp = $("<div>");
+            arrowUp.addClass("arrow-up");
+            arrowUp.data("db", columns[columnIndex].db);
+            var arrowDown = $("<div>");
+            arrowDown.addClass("arrow-down");
+            arrowDown.data("db", columns[columnIndex].db);
+            arrowUp.click(function() {
+                var db = $(this).data("db");
+                sortByColumn(filteredDataset, db);
+            });
+            arrowDown.click(function() {
+                var db = $(this).data("db");
+                sortByColumn(filteredDataset, db, -1);
+            });
+            arrowContainer.append(arrowUp);
+            arrowContainer.append(arrowDown);
+            tdColumnHeader.append(arrowContainer);
+        }
         tableHeadRow.append(tdColumnHeader);
     }
 
-    // Generate rows
-    for (var i = 0; i < dataset.pals.length; i++) {
-        if (matchesFilter(dataset.pals[i], filters)) {
-            var row = $("<tr>");
-
-            for (var j = 0; j < columns.length; j++) {
-                var elem = $("<td>");
-                if (columns[j].db) {
-                    var column = columns[j].db;
-                    elem.text(dataset.pals[i][column]);
-                } else {
-                    var column = columns[j].nodb;
-                    if (column === "edit") {
-                        var btn = $("<button>");
-                        btn.text("Edit PAL");
-                        btn.addClass("btn btn-default btn-sm");
-                        btn.attr("type", "button");
-                        btn.data("palJson", dataset.pals[i]);
-                        btn.attr("data-toggle", "modal");
-                        btn.attr("data-target", "#myModal");
-                        btn.click(function() {
-                            var pal = $(this).data("palJson");
-                            window.frames["addPalIframe"].editPal(pal);
-                        });
-                        elem.append(btn);
-                    }
-                }
-                row.append(elem);
-            }
-            tableBody.append(row);
+    // Generate filtered dataset (Stored separately for report generation to access filtered and full dataset
+    filteredDataset.pals = [];
+    for (var palIndex = 0; palIndex < chosenDataset.pals.length; palIndex++) {
+        if (matchesFilters(chosenDataset.pals[palIndex], filters)) {
+            filteredDataset.pals.push(chosenDataset.pals[palIndex]);
         }
     }
+
+    // Generate rows
+    generateRows();
 }
 
-function addNewPal(){
-    alert("HERE")
-    document.getElementById("addPalIframe").style.display="block";
-}
-
-function applyFilters(dataset) {
+function refreshTable(chosenDataset) {
     // Load columns
     columns = [];
     var chkId = $("#chkID")[0];
@@ -140,10 +190,10 @@ function applyFilters(dataset) {
     filters.minAge = minAge;
     filters.maxAge = maxAge;
 
-    displayPalSet(dataset, filters);
+    refreshTableWithFilters(chosenDataset, filters);
 }
 
-function matchesFilter(pal, filters) {
+function matchesFilters(pal, filters) {
     if (filters.firstname && !pal.firstName.toLowerCase().includes(filters.firstname.toLowerCase())) {
         return false;
     }
@@ -152,6 +202,44 @@ function matchesFilter(pal, filters) {
     }
     // TODO add more filters
     return true;
+}
+
+function sortByColumn(chosenDataset, db, modifier = 1) {
+    // modifier is used to switch between ascending/descending
+    chosenDataset.pals.sort(function(a, b) {
+        if (a[db] < b[db]) {
+            return -1 * modifier;
+        } else if (a[db] > b[db]) {
+            return 1 * modifier;
+        } else {
+            return 0;
+        }
+    });
+
+    // Regenerate rows of table after sorting
+    generateRows();
+}
+
+function alterOrAddPal(pal) {
+    if (pal.hasOwnProperty("id")) {
+        for (var i = 0; i < dataset.pals.length; i++) {
+            if (dataset.pals[i].id && dataset.pals[i].id === pal.id) {
+                // If same pal, update them
+                dataset.pals[i] = pal;
+                // Stop checking (IDs are unique)
+                break;
+            }
+        }
+    } else {
+        console.log("No ID found, let database generate one for new pal");
+        /* Pal NEEDS an ID for adding/editing to work properly TODO make id come from database auto-gen (send updated pal to server, wait for pal back with ID?)*/
+        pal.id = (new Date()).getTime();
+        dataset.pals.push(pal);
+    }
+    // TODO send new/altered pal info to server
+
+    // Now regenerate rows to show new info
+    refreshTable(dataset);
 }
 
 // TODO get dataset from database
@@ -172,4 +260,8 @@ var dataset = {
         lastName: "Doe",
         email: "john@doe.zz.vc"
     }]
+};
+
+var filteredDataset = {
+    pals: []
 };

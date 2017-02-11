@@ -1,46 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="lib/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
-        <script type="text/javascript" src="lib/bootstrap.min.js"></script>
-        <style>
-            body {
-                background-color: #ffc299;
-            }
 
-            p {
-                color: rgb(255,0,255);
-            }
-        </style>
-        <script type="text/javascript">
-            function editPal(pal) {
-                $("#firstName").val(pal.firstName);
-                $("#lastName").val(pal.lastName);
-                $("#email").val(pal.email);
-            }
-        </script>
-    </head>
-    <body>
+<head>
+    <script src="lib/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
+    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/addPal.css">
+    <script type="text/javascript" src="scripts/addPal.js"></script>
+</head>
+
+<body>
     <div class="container">
         <br>
-
         <form>
+            <div id="palStore" style="display:none;"></div>
             <div class="form-group">
-              <label for="firstName">First Name:</label>
-              <input class="form-control" id="firstName" placeholder="Enter PAL's first name" required="true">
+                <label for="firstName">First Name:</label>
+                <input class="form-control" id="firstName" placeholder="Enter PAL's first name" required="true">
             </div>
             <div class="form-group">
-              <label for="lastName">Last Name:</label>
-              <input class="form-control" id="lastName" placeholder="Enter PAL's last name" required="true">
+                <label for="lastName">Last Name:</label>
+                <input class="form-control" id="lastName" placeholder="Enter PAL's last name" required="true">
             </div>
             <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="email" class="form-control" id="email" placeholder="Enter email" required="true">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" required="true">
             </div>
-
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-default" id="addPalBtn" onclick="submitFunc()">Submit</button>
         </form>
     </div>
-    </body>
+</body>
+
 </html>

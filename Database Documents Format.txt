@@ -4,26 +4,26 @@
 	"_id": ObjectId(DEADBEEF0000),
 	"firstname": "name",
 	"surname": "lastname",
-	"dateofbirth":date(),
+	"dateofbirth": Date(),
 	"age": 70,
 	"gender": "M"/"F",
 	"projects": [
 		project1_id,
 		project2_id
 	],
-	"medical info": id,
-	"contact info": id,
-	"further personal info": id
+	"medical_info": id,
+	"contact_info": id,
+	"personal_info": id
 }
 
 //Further Personal Info document design
 
 {
 	"_id": ObjectId(DEADBEEF0001),
-	"relationship status": "married",
-	"ethnic origin": "white british",
-	"sexual orientation": "",
-	"employment status": "retired",
+	"relationship_status": "married",
+	"ethnic_origin": "white british",
+	"sexual_orientation": "",
+	"employment_status": "retired",
 	"consent": {
 		"photo": True/False,
 		"data": True/False,
@@ -33,15 +33,15 @@
 		"detail": "any further detail provided"
 	},
 	"referral": "name",
-	"date registered": date(),
-	"venu": "name"
+	"date_registered": Date(),
+	"venue": "name"
 }
 
 //Project document design
 
 {
 	"_id": ObjectId(DEADBEEF0002),
-	"project name": "project_name",
+	"project_name": "project_name",
 	"status": "project_status"
 }
 
@@ -49,14 +49,15 @@
 
 {
 	"_id": ObjectId(DEADBEEF0003),
-	"address": "street",
-	"postcode": "DH1 3EE",
+	"street": "text",
+        "postcode": "DH1 3EE",
+        "city": "Durham",
 	"telephone": "0123456789",
 	"mobile": "0012325423",
 	"email": "example@email.com"
 }
 
-//Medical Info document design
+//Medical Details document design
 
 {
 	"_id": ObjectId(DEADBEEF0004),
@@ -72,8 +73,8 @@
 		"type": "physical"/"mental health"/"sensory"/"cognitive",
 		"details": "any further details provided"
 	],
-	"extra help": True/False,
-	"carer": "Y"/"N"/"Parttime"/"fulltime"/"N/A"
+	"extra_help": True/False,
+	"carer": "Y"/"N"/"Parttime"/"Fulltime"/"N/A"
 }
 
 //GP document design
@@ -82,7 +83,9 @@
 	"_id": ObjectId(DEADBEEF0005),
 	"firstname": "name",
 	"surname": "name",
-	"practice name": "name",
-	"address": "text",
+	"practice_name": "name",
+	"street": "text",
+        "postcode": "DH1 3EE",
+        "city": "Durham",
 	"telephone": "number"
 }

@@ -11,7 +11,8 @@
 .nav.navbar-nav li a {
     color: white;
 }
-.nav.navbar-nav >li> a:hover {
+
+.nav.navbar-nav>li>a:hover {
     color: #ffaa80;
 }
 
@@ -25,7 +26,7 @@
     /*background-color: #fff2e6;*/
 }
 
-.navbar-brand:hover{
+.navbar-brand:hover {
     background-color: #ffaa80 !important;
 }
 
@@ -100,25 +101,76 @@ body {
     margin-bottom: 5px;
 }
 
+
 /* Remove those damn annoying grey lines on the table */
-.table-bordered>thead>tr>th,.table-bordered>tbody>tr>td{
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>td {
     border: 0px;
     border-bottom-width: 0px;
 }
 
-.modal-header
- {
-     background-color: #7A1211;
-     color: white;
- }
-.modal-body
-{ 
+.modal-header {
+    background-color: #7A1211;
+    color: white;
+}
+
+.modal-body {
     background-color: #7A1211;
     color: white;
 }
 
 .close {
-    color: white; 
+    color: white;
     opacity: 1;
 }
 
+.hover-show-arrow:hover .arrow-container {
+    display: inline-block;
+}
+
+.hover-show-arrow:hover {}
+
+.arrow-container {
+    display: none;
+    padding: 0;
+    margin-left: 5px;
+}
+
+.arrow-up:hover, .arrow-down:hover {
+    cursor: pointer;
+}
+
+.arrow-up {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid black;
+    margin-bottom: 2px;
+}
+
+.arrow-down {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid black;
+}
+
+#query-filters {
+    margin-bottom: 10px;
+}
+
+.checkbox-group {
+    background-color: #fff2e6;
+    padding: 3px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    border-radius: 4px;
+}
+
+.checkbox-group label em {
+    text-decoration: underline;
+}
