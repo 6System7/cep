@@ -12,7 +12,15 @@
     color: white;
 }
 
-.nav.navbar-nav>li>a:hover {
+.nav.navbar-nav li a:hover {
+    color: #ffaa80;
+}
+
+.nav.navbar-nav #reportGenLi a {
+    color: white;
+}
+
+.nav.navbar-nav #reportGenLi a:hover {
     color: #ffaa80;
 }
 
