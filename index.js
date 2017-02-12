@@ -10,7 +10,8 @@ const PATH_PREFIX = __dirname + '/' + PUBLIC_DIRECTORY
 
 // console.log(PATH_PREFIX)
 
-app.use(express.static(PUBLIC_DIRECTORY))
+app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'));
+app.use(express.static(PUBLIC_DIRECTORY));
 
 app.get('/', function(req, res) {
   res.sendFile(PATH_PREFIX + '/index.html')
@@ -25,8 +26,6 @@ app.get('*', function(req, res) {
   // console.log(req)
   res.status(404).send('uh')
 });
-
-app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'));
 
 const PORT = 8080;
 app.listen(PORT, function () {
