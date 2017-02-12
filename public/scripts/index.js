@@ -1,8 +1,9 @@
 // db: database column title, hr: human readable column title
 var columns;
+var filters;
 
 // can only get slider values nicely on slide event
-var minAge = 10,
+var minAge = 20,
     maxAge = 50;
 
 $(document).ready(function() {
@@ -89,7 +90,7 @@ function generateRows() {
     }
 }
 
-function refreshTableWithFilters(chosenDataset, filters = {}) {
+function refreshTableWithFilters(chosenDataset, filters = []) {
     var tableHeadRow = $("#tHeadPalsRow");
     tableHeadRow.empty();
 
@@ -123,7 +124,7 @@ function refreshTableWithFilters(chosenDataset, filters = {}) {
         tableHeadRow.append(tdColumnHeader);
     }
 
-    // Generate filtered dataset (Stored separately for report generation to access filtered and full dataset
+    // Generate filtered dataset (Stored separately for report generation to access filtered and full dataset)
     filteredDataset.pals = [];
     for (var palIndex = 0; palIndex < chosenDataset.pals.length; palIndex++) {
         if (matchesFilters(chosenDataset.pals[palIndex], filters)) {
@@ -175,32 +176,46 @@ function refreshTable(chosenDataset) {
     }
 
     // Load filters
-    var filters = {};
+    filters = [];
 
     var txtFname = $("#txtFirstName");
     if (txtFname.val()) {
-        filters.firstname = txtFname.val();
+        filters.push({
+            column: "firstName",
+            type: "contains",
+            value: txtFname.val()
+        });
     }
 
     var txtLname = $("#txtLastName");
     if (txtLname.val()) {
-        filters.lastname = txtLname.val();
+        filters.push({
+            column: "lastName",
+            type: "contains",
+            value: txtLname.val()
+        });
     }
 
-    filters.minAge = minAge;
-    filters.maxAge = maxAge;
+    filters.push({
+        column: "age",
+        type: "range",
+        value: "" + minAge + "%" + maxAge
+    });
 
     refreshTableWithFilters(chosenDataset, filters);
 }
 
 function matchesFilters(pal, filters) {
-    if (filters.firstname && !pal.firstName.toLowerCase().includes(filters.firstname.toLowerCase())) {
-        return false;
+    for (var i = 0; i < filters.length; i++) {
+        var filter = filters[i];
+        if (filter.type === "contains") {
+            if (!pal[filter.column].toLowerCase().includes(filter.value.toLowerCase())) {
+                return false;
+            }
+        } else if (filter.type === "range") {
+            // TODO add age calculation from DOB from db etc blah send help
+        }
     }
-    if (filters.lastname && !pal.lastName.toLowerCase().includes(filters.lastname.toLowerCase())) {
-        return false;
-    }
-    // TODO add more filters
     return true;
 }
 
@@ -242,25 +257,22 @@ function alterOrAddPal(pal) {
     refreshTable(dataset);
 }
 
-function generateReport(){
+function generateReport() {
+    // Don't allow the view as report link to remain "active"
+    $("#reportGenLi").removeClass("active");
+
     // Extract pal arrays for report gen
     var databaseFR = dataset.pals;
     var filteredDatabaseFR = filteredDataset.pals;
     // Remove non-database columns (such as edit), and pass in 'db' names
-    var columnsFR  = columns.filter(c => c.hasOwnProperty("db")).map(c => c.db);
+    var columnsFR = columns.filter(c => c.hasOwnProperty("db")).map(c => c.db);
 
-    // TODO ensure filters are correctly passed
-    var filtersFR = [{column: "age", type: "range", value: "10%20"}, {column: "firstname", type: "contains", value: "Jordan"}];
-
-
-    // TODO remove, old, examples, blah
-    // var databaseFR = [{id: "001", firstname: "Jordan", lastname: "Craig", age: 19, college: "St Hild & Bede"},
-                    // {id: "002", firstname: "Daniel", lastname: "Kluvanec", age: 5, college: "St Hild & Bede"},
-                    // {id: "003", firstname: "Simeon", lastname: "Chan", age: 25, college: "Hatfield"}];
-    // var filteredDatabaseFR = [{id: "002", firstname: "Daniel", lastname: "Kluvanec", age: 5, college: "St Hild & Bede"},
-    //                         {id: "003", firstname: "Simeon", lastname: "Chan", age: 25, college: "Hatfield"}];
-
-    var data = {database: databaseFR, columns: columnsFR, filters: filtersFR, filteredDatabase: filteredDatabaseFR}
+    var data = {
+        database: databaseFR,
+        columns: columnsFR,
+        filters: filters,
+        filteredDatabase: filteredDatabaseFR
+    }
 
     google.charts.setOnLoadCallback(genReport(data));
 }
