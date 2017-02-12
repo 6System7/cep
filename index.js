@@ -24,7 +24,7 @@ app.get('*', function(req, res) {
 });
 
 app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'));
-app.use('/report', express.static(__dirname + '/reportGen.js'));
+app.use('/report', express.static(__dirname + '/modules/reportGen.js'));
 
 const PORT = 8080;
 app.listen(PORT, function () {
