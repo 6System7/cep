@@ -6,13 +6,13 @@
 //Generate statistics and format data
 //Create pdf report using generated statistics and data
 
-function genReport(reportData){
+function genReport(reportData) {
     console.log("generating report...");
 
     genGraphs(reportData);
 }
 
-function genPDF(reportData, graphs){
+function genPDF(reportData, graphs) {
 
     var database = reportData.database;
     var columns = reportData.columns;
@@ -21,16 +21,49 @@ function genPDF(reportData, graphs){
     var today = new Date();
 
     var docDefinition = {
-        content: [
-            {text: 'Report ' + today.getDate() + "/" + (today.getMonth()+1) + "/" + today.getFullYear(), style: 'header', alignment: "center", fontSize: 18, bold: true},
-            {text: 'Filtered Table', style: 'header', alignment: "center", fontSize: 14, bold: true},
+        content: [{
+                text: 'Report ' + today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear(),
+                style: 'header',
+                alignment: "center",
+                fontSize: 18,
+                bold: true
+            },
+            {
+                text: 'Filtered Table',
+                style: 'header',
+                alignment: "center",
+                fontSize: 14,
+                bold: true
+            },
             filteredTable(filteredDatabase, columns, filters),
-            {text: '\n\nFilters applied', style: 'header', fontSize: 14, bold: true},
-            {ol: filterList(filters)},
-            {text: '\n\nBase Statistics', style: 'header', fontSize: 14, bold: true},
-            {ol: statisticsList(filteredDatabase)},
-            {text: '\n\nGraphical Data', style: 'header', fontSize: 14, bold: true},
-            {image: graphs, width: 400}
+            {
+                text: '\n\nFilters applied',
+                style: 'header',
+                fontSize: 14,
+                bold: true
+            },
+            {
+                ol: filterList(filters)
+            },
+            {
+                text: '\n\nBase Statistics',
+                style: 'header',
+                fontSize: 14,
+                bold: true
+            },
+            {
+                ol: statisticsList(filteredDatabase)
+            },
+            {
+                text: '\n\nGraphical Data',
+                style: 'header',
+                fontSize: 14,
+                bold: true
+            },
+            {
+                image: graphs,
+                width: 400
+            }
         ]
     };
 
@@ -41,7 +74,7 @@ function genPDF(reportData, graphs){
 
 }
 
-function genGraphs(reportData){
+function genGraphs(reportData) {
 
     //Male to Female Pie Chart
     //Age Range Bar/Pie Chart
@@ -52,10 +85,22 @@ function genGraphs(reportData){
     data.addColumn('number', 'Attendance');
 
     data.addRows([
-        [{v: new Date(2017, 0, 1),f: "1st of Jan"}, 1000],
-        [{v: new Date(2017, 1, 1),f: "1st of Feb"}, 2000,],
-        [{v: new Date(2017, 2, 1),f: "1st of March"}, 1500],
-        [{v: new Date(2017, 3, 1),f: "1st of April"}, 2500],
+        [{
+            v: new Date(2017, 0, 1),
+            f: "1st of Jan"
+        }, 1000],
+        [{
+            v: new Date(2017, 1, 1),
+            f: "1st of Feb"
+        }, 2000, ],
+        [{
+            v: new Date(2017, 2, 1),
+            f: "1st of March"
+        }, 1500],
+        [{
+            v: new Date(2017, 3, 1),
+            f: "1st of April"
+        }, 2500],
     ]);
 
     var options = {
@@ -77,53 +122,58 @@ function genGraphs(reportData){
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
     chart.draw(data, options);
     //google.visualization.events.addListener(chart, 'ready', function () {
-        genPDF(reportData, chart.getImageURI());
+    genPDF(reportData, chart.getImageURI());
     //});
 
 }
 
-function filterList(filters){
+function filterList(filters) {
 
     var filterList = [];
-    filters.forEach(function(filter){
-        if(filter.type == "contains"){
+    filters.forEach(function(filter) {
+        if (filter.type == "contains") {
             filterList.push(filter.column + " contains " + filter.value);
         }
-        if(filter.type == "range"){
-            filterList.push(filter.column + " is bigger than " + (filter.value).toString().split("%")[1] + " and less than " + (filter.value).toString().split("%")[0]);
+        if (filter.type == "range") {
+            filterList.push(filter.column + " is between " + (filter.value).toString().split("%")[0] + " and " + (filter.value).toString().split("%")[1]);
         }
     });
     return filterList;
 
 }
 
-function statisticsList(database){
+function statisticsList(database) {
     var statistics = statisticCalc(database);
     var statisticsList = [];
 
-    Object.keys(statistics).forEach(function(statistic){
+    Object.keys(statistics).forEach(function(statistic) {
         statisticsList.push(statistic + " = " + statistics[statistic]);
     });
 
     return statisticsList;
 }
 
-function statisticCalc(database){
+function statisticCalc(database) {
     var statistics = {};
     var total = database.length;
     statistics.total = total;
-    var ageRange = {20: 0, 40: 0, 60: 0, 80: 0, 100: 0};
+    var ageRange = {
+        20: 0,
+        40: 0,
+        60: 0,
+        80: 0,
+        100: 0
+    };
     statistics.agerange = ageRange;
 
-    database.forEach(function(entry){
-    });
+    database.forEach(function(entry) {});
 
     return statistics;
 }
 
-function filteredTable(entries, columns){
+function filteredTable(entries, columns) {
     var widths = [];
-    columns.forEach(function(){
+    columns.forEach(function() {
         widths.push('*');
     });
     return {
@@ -139,18 +189,23 @@ function filteredTable(entries, columns){
     };
 }
 
-function buildTableBody(entries, columns){
+function buildTableBody(entries, columns) {
 
     var body = [];
     var headers = [];
 
-    columns.forEach(function(headerName){
-        headers.push({text: headerName, style: 'tableHeader', alignment: 'center', bold: true});
+    columns.forEach(function(headerName) {
+        headers.push({
+            text: headerName,
+            style: 'tableHeader',
+            alignment: 'center',
+            bold: true
+        });
     });
     body.push(headers);
-    entries.forEach(function(entryData){
+    entries.forEach(function(entryData) {
         var entry = [];
-        columns.forEach(function(column){
+        columns.forEach(function(column) {
             entry.push(entryData[column]);
         });
         body.push(entry);

@@ -3,7 +3,7 @@ var columns;
 var filters;
 
 // can only get slider values nicely on slide event
-var minAge = 10,
+var minAge = 20,
     maxAge = 50;
 
 $(document).ready(function() {
