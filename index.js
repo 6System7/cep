@@ -23,6 +23,9 @@ app.get('*', function(req, res) {
   res.status(404).send('uh')
 });
 
+app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'));
+app.use('/report', express.static(__dirname + '/reportGen.js'));
+
 const PORT = 8080;
 app.listen(PORT, function () {
   console.log('Web Services App listening on port ' + PORT)
