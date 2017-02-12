@@ -1,9 +1,10 @@
+//  Imports
 var express = require('express')
 var db = require('mongodb')
 var passport = require('passport')
 var Strategy = require('passport-local').Strategy
 var connectEnsure = require('connect-ensure-login')
-
+//  Passport setup
 passport.use(new Strategy(
   function(username, password, cb) {
     db.users.findByUsername(username, function(err, user) {
@@ -28,13 +29,13 @@ passport.deserializeUser(function(id, cb) {
 
 var app = express()
 
-//app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'))
+app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'))
 app.use(express.static('public'))
 app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 
 app.use(require('express-session')({
-  secret: 'keyboard cat',
+  secret: 'Brother, May I have some oats?',
   resave: false,
   saveUninitialized: false }
 ))
@@ -43,7 +44,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.get('/',
-  connectEnsure.ensureLoggedIn('/login'),
+  //connectEnsure.ensureLoggedIn('/login'),
   function(req, res) {
     res.render('index')
 })
@@ -61,14 +62,35 @@ app.post('/login',
       failureRedirect: '/login' 
     }
   )
-);
+)
+
+app.get('/addPal',
+  //connectEnsure.ensureLoggedIn('/login'),
+  function(req, res) {
+    res.render('addPal')
+  }
+)
+
+app.post('/addPal',
+  //connectEnsure.ensureLoggedIn('/login'),
+  function(req, res) {
+    //TODO
+  }
+)
+
+app.get('/getPal',
+  //connectEnsure.ensureLoggedIn('/login'),
+  function(req, res) {
+    //TODO
+  }
+)
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
   res.status(404).send('uh')
-});
+})
 
-const PORT = 8080;
+const PORT = 8080
 app.listen(PORT, function () {
   console.log('Web Services App listening on port ' + PORT)
 })
