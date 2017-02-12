@@ -26,7 +26,7 @@ $(document).ready(function() {
         // Ensure inputs are cleared (they get cleared on submit, not on 'Cross' click to exit)
         window.frames["addPalIframe"].clearInputs();
     });
-    
+
     $("#checkAllPersonal").change(function() {
         $("#personalDataCheckboxes input:checkbox").prop('checked', $(this).prop("checked"));
     });
@@ -241,6 +241,32 @@ function alterOrAddPal(pal) {
     // Now regenerate rows to show new info
     refreshTable(dataset);
 }
+
+function generateReport(){
+    console.log("Generating report...");
+
+    // Extract pal arrays for report gen
+    var databaseFR = dataset.pals;
+    var filteredDatabaseFR = filteredDataset.pals;
+    // Remove non-database columns (such as edit), and pass in 'db' names
+    var columnsFR  = columns.filter(c => c.hasOwnProperty("db")).map(c => c.db);
+
+    // TODO ensure filters are correctly passed
+    var filtersFR = [{column: "age", type: "range", value: "10%20"}, {column: "firstname", type: "contains", value: "Jordan"}];
+
+
+    // TODO remove, old, examples, blah
+    // var databaseFR = [{id: "001", firstname: "Jordan", lastname: "Craig", age: 19, college: "St Hild & Bede"},
+                    // {id: "002", firstname: "Daniel", lastname: "Kluvanec", age: 5, college: "St Hild & Bede"},
+                    // {id: "003", firstname: "Simeon", lastname: "Chan", age: 25, college: "Hatfield"}];
+    // var filteredDatabaseFR = [{id: "002", firstname: "Daniel", lastname: "Kluvanec", age: 5, college: "St Hild & Bede"},
+    //                         {id: "003", firstname: "Simeon", lastname: "Chan", age: 25, college: "Hatfield"}];
+
+    var data = {database: databaseFR, columns: columnsFR, filters: filtersFR, filteredDatabase: filteredDatabaseFR}
+
+    google.charts.setOnLoadCallback(genReport(data));
+}
+
 
 // TODO get dataset from database
 var dataset = {

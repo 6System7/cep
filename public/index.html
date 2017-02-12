@@ -21,7 +21,11 @@
     <script type="text/javascript" src="/pdf/pdfmake.min.js"></script>
     <script type="text/javascript" src='/pdf/vfs_fonts.js'></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script>google.charts.load('current', {'packages':['corechart']});</script>>
+    <script>
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+    </script>
     <script type="text/javascript" src='/report'></script>
 </head>
 
@@ -41,7 +45,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav" id="nav">
                     <li class="active"><a href="#">View Pals</a></li>
-                    <li><a href="admin.html">Reports</a></li>
+                    <li><a href="#" onclick="generateReport();">Save as report</a></li>
                 </ul>
                 <button id="btnSignOut" type="button" class="btn btn-default navbar-btn navbar-right" onclick="location.href = 'login.html';">
                 Sign out
@@ -252,28 +256,5 @@
         <div id="chart_div" style="display:none"></div>
     </div>
 </body>
-
-<!--
-<script type="text/javascript">
-
-function callReportGen(){
-
-    var database = [{id: "001", firstname: "Jordan", lastname: "Craig", age: 19, college: "St Hild & Bede"},
-                    {id: "002", firstname: "Daniel", lastname: "Kluvanec", age: 5, college: "St Hild & Bede"},
-                    {id: "003", firstname: "Simeon", lastname: "Chan", age: 25, college: "Hatfield"}];
-    var columns = ["firstname", "college"];
-    var filters = [{column: "age", type: "range", value: "10%20"}, {column: "firstname", type: "contains", value: "Jordan"}];
-    var filteredDatabase = [{id: "002", firstname: "Daniel", lastname: "Kluvanec", age: 5, college: "St Hild & Bede"},
-                            {id: "003", firstname: "Simeon", lastname: "Chan", age: 25, college: "Hatfield"}];
-
-    var data = {database: database, columns: columns, filters: filters, filteredDatabase: filteredDatabase}
-
-    google.charts.setOnLoadCallback(genReport(data));
-
-}
-
-</script>
-
--->
 
 </html>
