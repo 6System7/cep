@@ -243,8 +243,6 @@ function alterOrAddPal(pal) {
 }
 
 function generateReport(){
-    console.log("Generating report...");
-
     // Extract pal arrays for report gen
     var databaseFR = dataset.pals;
     var filteredDatabaseFR = filteredDataset.pals;
