@@ -194,9 +194,9 @@ function buildTableBody(entries, columns) {
     var body = [];
     var headers = [];
 
-    columns.forEach(function(headerName) {
+    columns.forEach(function(columnData) {
         headers.push({
-            text: headerName,
+            text: columnData.hr,
             style: 'tableHeader',
             alignment: 'center',
             bold: true
@@ -206,7 +206,7 @@ function buildTableBody(entries, columns) {
     entries.forEach(function(entryData) {
         var entry = [];
         columns.forEach(function(column) {
-            entry.push(entryData[column]);
+            entry.push(entryData[column.db]);
         });
         body.push(entry);
     });
