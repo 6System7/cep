@@ -265,7 +265,7 @@ function generateReport() {
     var databaseFR = dataset.pals;
     var filteredDatabaseFR = filteredDataset.pals;
     // Remove non-database columns (such as edit), and pass in 'db' names
-    var columnsFR = columns.filter(c => c.hasOwnProperty("db")).map(c => c.db);
+    var columnsFR = columns.filter(c => c.hasOwnProperty("db")); //.map(c => c.db);
 
     var data = {
         database: databaseFR,
