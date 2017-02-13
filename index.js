@@ -31,7 +31,7 @@ passport.deserializeUser(function(id, cb) {
 var dbURL = 'mongodb://localhost:27017/myproject';
 // Use connect method to connect to the Server 
 MongoClient.connect(dbURL, function(err, db) {
-  assert.equal(null, err);
+  //assert.equal(null, err);
   console.log("Connected correctly to server");
   //db.close();
 });
