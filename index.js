@@ -30,7 +30,7 @@ passport.deserializeUser(function(id, cb) {
 // Connection URL
 // TODO replace to whatever this should be
 var dbURL = 'mongodb://localhost:27017/myproject';
-// Use connect method to connect to the Server 
+// Use connect method to connect to the Server
 MongoClient.connect(dbURL, function(err, db) {
   //assert.equal(null, err);
   console.log("Connected correctly to server");
@@ -69,7 +69,7 @@ app.post('/login',
     'local',
     {
       successReturnToOrRedirect: '/',
-      failureRedirect: '/login' 
+      failureRedirect: '/login'
     }
   )
 )
@@ -104,4 +104,3 @@ const PORT = 8080
 app.listen(PORT, function () {
   console.log('Web Services App listening on port ' + PORT)
 })
-
