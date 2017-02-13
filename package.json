@@ -17,10 +17,13 @@
   },
   "homepage": "https://github.com/6System7/cep#readme",
   "dependencies": {
+    "chartjs": "^0.3.24",
+    "connect-ensure-login": "^0.1.1",
     "express": "^4.14.1",
+    "express-session": "^1.15.1",
     "mongodb": "^2.2.22",
     "nodemon": "^1.11.0",
-    "chartjs": "^0.3.24",
+    "passport-local": "^1.0.0",
     "pdfmake": "^0.1.25"
   }
 }
