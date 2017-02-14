@@ -181,7 +181,10 @@ function refreshTable(chosenDataset) {
     var txtFname = $("#txtFirstName");
     if (txtFname.val()) {
         filters.push({
-            column: "firstName",
+            column: {
+                db: "firstName",
+                hr: "First Name"
+            },
             type: "contains",
             value: txtFname.val()
         });
@@ -190,14 +193,20 @@ function refreshTable(chosenDataset) {
     var txtLname = $("#txtLastName");
     if (txtLname.val()) {
         filters.push({
-            column: "lastName",
+            column: {
+                db: "lastName",
+                hr: "Last Name"
+            },
             type: "contains",
             value: txtLname.val()
         });
     }
 
     filters.push({
-        column: "age",
+        column: {
+            db: "age",
+            hr: "Age"
+        },
         type: "range",
         value: "" + minAge + "%" + maxAge
     });
@@ -209,7 +218,7 @@ function matchesFilters(pal, filters) {
     for (var i = 0; i < filters.length; i++) {
         var filter = filters[i];
         if (filter.type === "contains") {
-            if (!pal[filter.column].toLowerCase().includes(filter.value.toLowerCase())) {
+            if (!pal[filter.column.db].toLowerCase().includes(filter.value.toLowerCase())) {
                 return false;
             }
         } else if (filter.type === "range") {
@@ -265,7 +274,7 @@ function generateReport() {
     var databaseFR = dataset.pals;
     var filteredDatabaseFR = filteredDataset.pals;
     // Remove non-database columns (such as edit), and pass in 'db' names
-    var columnsFR = columns.filter(c => c.hasOwnProperty("db")).map(c => c.db);
+    var columnsFR = columns.filter(c => c.hasOwnProperty("db")); //.map(c => c.db);
 
     var data = {
         database: databaseFR,
@@ -284,12 +293,12 @@ var dataset = {
         id: 0,
         firstName: "Maddy",
         lastName: "Sands",
-        email: "Madeleine@Sands.com"
+        email: "hereareyour@oa.ts"
     }, {
         id: 1,
         firstName: "Mike",
         lastName: "Croall",
-        email: "Notmypres@ide.nt"
+        email: "brothermayihavesome@oa.ts"
     }, {
         id: 2,
         firstName: "John",
