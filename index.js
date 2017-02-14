@@ -98,6 +98,8 @@ app.get('/getPal',
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
   res.status(404).send('uh')
+  //have a 404 page now but need it to take away passport. 
+   
 })
 
 const PORT = 8080

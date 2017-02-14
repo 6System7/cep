@@ -5,3 +5,8 @@ body {
 p {
     color: rgb(255,0,255);
 }
+#deletePalBtn {
+    background-color: #7A1211;
+    color: white;
+    border-color: white;
+}

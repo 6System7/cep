@@ -223,6 +223,7 @@ function matchesFilters(pal, filters) {
             }
         } else if (filter.type === "range") {
             // TODO add age calculation from DOB from db etc blah send help
+            // age needs to be returned
         }
     }
     return true;

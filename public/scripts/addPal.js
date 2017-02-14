@@ -1,3 +1,15 @@
+$(document).ready(function(){
+    var $body = $(window.frameElement).parents('body'),
+    dlg = $body.find('#myModal');
+    
+    $(dlg).on('hide.bs.modal', function (e) {
+         $('#confirmationModal').modal('toggle');
+        // TODO figure this out
+        
+            
+    
+    })
+})
 function editPal(pal) {
     $("#palStore").data("pal", pal);
     $("#firstName").val(pal.firstName);
@@ -16,6 +28,8 @@ function getPalFromInputs() {
     pal.firstName = $("#firstName").val();
     pal.lastName = $("#lastName").val();
     pal.email = $("#email").val();
+    
+    // TODO remember to update
     return pal;
 }
 
@@ -31,9 +45,29 @@ function submitFunc() {
     // Close self
     window.parent.closeModal();
 }
+
+
 function deletePalFunc(){
-    alert("hey");
+    //  grab pal - need path to delete
+    
+    
+    /*
+    var pal = $("#palStore").data("pal");
+    $.ajax({
+        url: delPals
+        type: 'DELETE',
+        success: function(){
+        //refresh page
+    }
+        
+    })
+    */
+    
+    // make request to server with pal
+   //window.parent.alterOrAddPal(getPalFromInputs());
+    
     
 
     
 }
+
