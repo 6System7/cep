@@ -31,3 +31,9 @@ function submitFunc() {
     // Close self
     window.parent.closeModal();
 }
+function deletePalFunc(){
+    alert("hey");
+    
+
+    
+}
