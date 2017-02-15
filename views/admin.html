@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>RT Home</title>
+    <title>RT Admin</title>
     <!-- Include jQuery for AJAX calls -->
     <script src="../public/lib/jquery.min.js"></script>
     <!-- Include bootstrap css and javascript -->
@@ -13,12 +13,14 @@
     <script type="text/javascript" src="./public/lib/bootstrap-slider.min.js"></script>
     <!-- Include our own CSS -->
     <link rel="stylesheet" type="text/css" href="../public/styles/admin.css">
-    <!-- Include our own JS
-    <script type="text/javascript" src="scripts/index.js"></script> -->
+    <!-- Include our own JS-->
+    <script type = "text/javascript" src = "../public/scripts/admin.js"></script>
+   
     <!-- Set meta for bootstrap to enable mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Scripts needed for Report Generation -->
     <script type="text/javascript" src='/pdf/vfs_fonts.js'></script>
+   
  
 </head>
 
@@ -54,15 +56,24 @@
                 
                 <h3 id = "tableTitle"> Certified Admins</h3>
                 
-                <table class="table table-responsive table-striped table-bordered">
+                <table id = "adminTable" class="table table-responsive table-striped table-bordered">
                     <thead>
-                        <tr>
+                        <tr id = "tHeadAdminsRow">
+                        </tr>
+                    </thead>
+                    <tbody id = "tBodyAdmins">
+                    </tbody>
+                </table>
+            </div>
+       
+    
+                      <!--    <tr>
                             <th>Admin Name</th>
                             <th>Usernames</th>
                             <th style = "display:none">Password </th>
                         </tr>
                     </thead>
-                    <tbody>
+                  <tbody id="tBodyAdmins">
                         <tr>
                         <td>Madeleine Sands</td>
                         <td> madeleine28 <button id = "editAdmin" class = "btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#editAdminModal">Edit Admin</button></td>
@@ -70,7 +81,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>-->
             <div id = "add option">
                 <button id = "addNewAdmin" class = "btn btn-primary btn-md" data-toggle="modal" data-target="#editAdminModal"> Add a new Admin </button>
             </div>
@@ -95,9 +106,11 @@
 
                 </div>
             </div>
+            
         </div>
         <div id="chart_div" style="display:none"></div>
-        </div>
+
+    </div>
     </body>
   
 </html>
