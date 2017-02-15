@@ -1,0 +1,120 @@
+.navbar {
+    background-color: #7A1211;
+    color: white;
+}
+
+.navbar #nav>.active>a {
+    color: black;
+    background-color: #ffaa80;
+}
+
+.nav.navbar-nav li a {
+    color: white;
+}
+
+.nav.navbar-nav li a:hover {
+    color: #ffaa80;
+}
+
+.nav.navbar-nav #reportGenLi a {
+    color: white;
+}
+
+.nav.navbar-nav #reportGenLi a:hover {
+    color: #ffaa80;
+}
+
+.navbar-brand {
+    padding-top: 7px;
+    background-color: #fff2e6;
+}
+
+#navbar-logo {
+    max-width: 50px;
+    /*background-color: #fff2e6;*/
+}
+
+.navbar-brand:hover {
+    background-color: #ffaa80 !important;
+}
+
+#basic-addon1 {
+    background: #ffc299;
+}
+
+
+
+#trcAgeSelection {
+    color: black;
+}
+
+body {
+    background-color: #fff2e6;
+}
+
+
+#pageheader {
+    color: #5C0000;
+    text-align: center;
+   
+}
+#tableTitle {
+    color: #7A1211;
+    text-align: center;
+    font-style: italic;
+}
+
+.table {
+    border-color: #7A1211;
+    border-width: 2px;
+    border-radius: 12px;
+}
+
+#topoftable {
+    background-color: #ffaa80;
+}
+
+.table-striped{
+    margin-left: 20px;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td, tr.found {
+    background-color: #ffc299;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, tr.found {
+    background-color: #ffe0cc;
+}
+
+/* Remove those damn annoying grey lines on the table */
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>td {
+    border: 0px;
+    border-bottom-width: 0px;
+}
+
+#addNewAdmin{
+    margin-left: 33px;
+    margin-top: 55px;
+    background-color: #7A1211;;
+    border-color: #7A1211;
+    color: white;
+}
+
+#editAdmin{
+    border-color: #7A1211;
+}
+.modal-header {
+    background-color: #7A1211;
+    color: white;
+}
+
+.modal-body {
+    background-color: #7A1211;
+    color: white;
+}
+
+.close {
+    color: white;
+    opacity: 1;
+}
