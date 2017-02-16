@@ -62,7 +62,7 @@ function genPDF(reportData, graphs) {
             },
             {
                 image: graphs,
-                width: 400
+                width: 500
             }
         ]
     };
@@ -92,7 +92,7 @@ function genGraphs(reportData) {
         [{
             v: new Date(2017, 1, 1),
             f: "1st of Feb"
-        }, 2000, ],
+        }, 2000],
         [{
             v: new Date(2017, 2, 1),
             f: "1st of March"
@@ -100,7 +100,7 @@ function genGraphs(reportData) {
         [{
             v: new Date(2017, 3, 1),
             f: "1st of April"
-        }, 2500],
+        }, 2500]
     ]);
 
     var options = {
@@ -132,10 +132,10 @@ function filterList(filters) {
     var filterList = [];
     filters.forEach(function(filter) {
         if (filter.type == "contains") {
-            filterList.push(filter.column + " contains " + filter.value);
+            filterList.push(filter.column.hr + " contains " + filter.value);
         }
         if (filter.type == "range") {
-            filterList.push(filter.column + " is between " + (filter.value).toString().split("%")[0] + " and " + (filter.value).toString().split("%")[1]);
+            filterList.push(filter.column.hr + " is between " + (filter.value).toString().split("%")[0] + " and " + (filter.value).toString().split("%")[1]);
         }
     });
     return filterList;
@@ -146,25 +146,25 @@ function statisticsList(database) {
     var statistics = statisticCalc(database);
     var statisticsList = [];
 
-    Object.keys(statistics).forEach(function(statistic) {
-        statisticsList.push(statistic + " = " + statistics[statistic]);
+    statistics.forEach(function(statistic) {
+        statisticsList.push(statistic.name.hr + " = " + statistic.value);
     });
 
     return statisticsList;
 }
 
 function statisticCalc(database) {
-    var statistics = {};
+    var statistics = [];
     var total = database.length;
-    statistics.total = total;
-    var ageRange = {
-        20: 0,
-        40: 0,
-        60: 0,
-        80: 0,
-        100: 0
-    };
-    statistics.agerange = ageRange;
+    statistics.push({name: {db: "total", hr: "Total Pals"}, value: total});
+    var ageRange =
+        "0" + " 20 yr old(s) (or younger), " +
+        "0" + " 20-40 yr old(s), " +
+        "0" + " 40-60 yr old(s), " +
+        "0" + " 60-80 yr old(s), " +
+        "0" + " 80 yr old(s) (or older)"
+    ;
+    statistics.push({name: {db: "ageRange", hr: "Age Range"}, value: ageRange});
 
     database.forEach(function(entry) {});
 
