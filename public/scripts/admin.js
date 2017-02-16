@@ -14,10 +14,7 @@ function refreshTable(dataset){
         db: "username",
         hr: "Username"
     });
-    columns.push({
-        db: "email",
-        hr: "Email"
-    });
+
     columns.push({
         db: "edit",
         hr: " "
@@ -39,24 +36,28 @@ function refreshTable(dataset){
         for (var columnIndex = 0; columnIndex < columns.length; columnIndex++){
             var elem = $("<td>");
            // alert(columns[columnIndex].db);
-            if (columns[columnIndex].db != "edit") {
-                var column = columns[columnIndex].db;
-                elem.text(dataset.admins[adminIndex][column]);
-            } 
-            else{
-                // TODO button not addening
-                var btn = $("<button>");
-                    btn.text("Edit Admin");
-                    btn.addClass("btn btn-default btn-sm");
-                    btn.attr("type", "button");
-                    btn.data("adminJson", dataset.admins[adminIndex]);
-                    btn.attr("data-toggle", "modal");
-                    btn.attr("data-target", "#editAdminModal");
-                    btn.click(function() {
-                        var admin = $(this).data("adminJson");
-                        window.frames["addAdminIframe"].editAdmin(admin);
-                        $("#addEditFormTitle").text("Edit an Admin");
-                    });
+            if (columns[columnIndex].db != "password") {
+                if (columns[columnIndex].db != "edit") {
+
+                    var column = columns[columnIndex].db;
+                    elem.text(dataset.admins[adminIndex][column]);
+                } 
+                else{
+             
+                    // TODO button not addening
+                    var btn = $("<button>");
+                        btn.text("Edit Admin");
+                        btn.addClass("btn btn-default btn-sm");
+                        btn.attr("type", "button");
+                        btn.data("adminJson", dataset.admins[adminIndex]);
+                        btn.attr("data-toggle", "modal");
+                        btn.attr("data-target", "#editAdminModal");
+                        btn.click(function() {
+                            var ad = $(this).data("adminJson");
+                               
+                            window.frames["#addAdminIframe"].editAdmin(ad);
+                            $("#addEditFormTitle").text("Edit an Admin");
+                        });
                 elem.append(btn);
             
                               
@@ -66,17 +67,20 @@ function refreshTable(dataset){
     tableBody.append(row);
     }
 }
+}
 
 var dataset = {
     admins: [{
         name: "Madeleine Sands",
         username: "madeleine28",
-        email: "madeleine28@gmail.comm"
+        password: "password"
+     
     },
     {
         name: "Kai Biegun",
         username: "kaliape63",
-        email: "kaiisweird@gmail.com"
+        password: "password"
+      
     }]
 };
 

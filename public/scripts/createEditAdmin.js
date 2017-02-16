@@ -13,8 +13,8 @@ $(document).ready(function(){
 function editAdmin(admin) {
     $("#adminStore").data("admin", admin);
     $("#name").val(admin.name);
+    alert($("#name").val(admin.name);)
     $("#username").val(admin.username);
-    $("#email").val(admin.email);
 
     $("#name").focus();
 }
@@ -27,7 +27,6 @@ function getAdminFromInputs() {
     }
     admin.name = $("#name").val();
     admin.username = $("#username").val();
-    admin.email = $("#email").val();
     
     // TODO remember to update
     return admin;

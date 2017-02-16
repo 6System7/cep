@@ -167,6 +167,16 @@ function refreshTable(chosenDataset) {
             hr: chkEmail.value
         });
     }
+    var chkDOB = $("#chkDOB")[0];
+    if (chkDOB.checked) {
+        columns.push({
+            db: "dob",
+            hr: chkDOB.value
+        });
+    }
+      
+    
+    // Always go last because it's the edit button --> goes on end. 
     var chkEdit = $("#chkEdit")[0];
     if (chkEdit.checked) {
         columns.push({
@@ -174,6 +184,7 @@ function refreshTable(chosenDataset) {
             hr: chkEdit.value
         })
     }
+ 
 
     // Load filters
     filters = [];
@@ -201,14 +212,19 @@ function refreshTable(chosenDataset) {
             value: txtLname.val()
         });
     }
+     //filters.push({
+    
+
+    
 
     filters.push({
         column: {
-            db: "age",
-            hr: "Age"
+            db: "dob",
+            hr: "DOB"
         },
         type: "range",
-        value: "" + minAge + "%" + maxAge
+        //value: "" + minAge + "%" + maxAge
+        value: [minAge, maxAge]
     });
 
     refreshTableWithFilters(chosenDataset, filters);
@@ -222,8 +238,22 @@ function matchesFilters(pal, filters) {
                 return false;
             }
         } else if (filter.type === "range") {
+            var x = pal.dob;
             // TODO add age calculation from DOB from db etc blah send help
             // age needs to be returned
+            var ageDifMs = Date.now() - x.getTime();
+            var ageDate = new Date(ageDifMs); // miliseconds from epoch
+            y = Math.abs(ageDate.getUTCFullYear() - 1970);
+            if (y > filter.value[0] && y < filter.value[1]){
+                return true;
+            }
+            else {
+                return false;
+            }
+           // CHECK HERE IF AGE IS IN RANGE???
+       
+          // return y;
+            
         }
     }
     return true;
@@ -289,25 +319,32 @@ function generateReport() {
 
 
 // TODO get dataset from database
+ var x = new Date(1971, 08,22)
+ var xx = new Date(1911, 08,22)
+ //x = x.toLocaleDateString();
 var dataset = {
-    pals: [{
+
+ pals: [{
         id: 0,
         firstName: "Maddy",
         lastName: "Sands",
-        email: "hereareyour@oa.ts"
+        email: "hereareyour@oa.ts",
+        dob: x
     }, {
         id: 1,
         firstName: "Mike",
         lastName: "Croall",
-        email: "brothermayihavesome@oa.ts"
+        email: "brothermayihavesome@oa.ts",
+        dob: x
+        
     }, {
         id: 2,
         firstName: "John",
         lastName: "Doe",
-        email: "john@doe.zz.vc"
+        email: "john@doe.zz.vc",
+        dob: xx
     }]
 };
-
 var filteredDataset = {
     pals: []
 };
