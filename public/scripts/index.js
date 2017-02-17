@@ -212,10 +212,18 @@ function refreshTable(chosenDataset) {
             value: txtLname.val()
         });
     }
-     //filters.push({
     
-
-    
+    var chkProfessionallyDiagnosed = $("#chkProfessionallyDiagnosed")[0];
+    if (chkProfessionallyDiagnosed.checked) {
+        filters.push({
+            column: {
+                db: "professionallyDiagnosed", // TODO what is this actually called in db? Is it one column or one per condition?
+                hr: "Professionally Diagnosed"
+            },
+            type: "equals",
+            value: true
+        });
+    };
 
     filters.push({
         column: {

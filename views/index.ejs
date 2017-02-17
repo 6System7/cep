@@ -46,10 +46,9 @@
                 <ul class="nav navbar-nav" id="nav">
                     <li class="active"><a href="#">View Pals</a></li>
                     <li id="reportGenLi"><a href="#" onclick="generateReport();">View as report</a></li>
-                    <li id="adminPage"><a href = "404page.html">Admin</a></li>
-                    <!-- TODO take out html for ejs? -->
+                    <li id="adminPage"><a href = "admin">Admin</a></li>
                 </ul>
-                <button id="btnSignOut" type="button" class="btn btn-default navbar-btn navbar-right" onclick="location.href = 'login.html';" style="margin-right: 2px;">
+                <button id="btnSignOut" type="button" class="btn btn-default navbar-btn navbar-right" onclick="location.href = 'login';" style="margin-right: 2px;">
                     Sign out
                 </button>
             </div>
@@ -63,8 +62,6 @@
             </button>
         </h1>
         </div>
-      
-
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
@@ -93,16 +90,14 @@
             ██▀░▀▀░██▀░▀██░██░░░██░░██░██▀█▀██░███▄██░▀█▄▀▀
             ██▄░▄▄░██▄░▄██░██░░░██░░██░██░░░██░██▀███░▄▄▀█▄
             ░▀███▀░░▀███▀░░████░▀████▀░██░░░██░██░░██░▀███▀ -->
-                 <button id="btnUpdate" type="button" class="btn btn-default">
+                <button id="btnUpdate" type="button" class="btn btn-default">
                 <h4 class="panel-title">Search</h4>
             </button> 
                 <br>
                 <br>
-              
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            
                             <h4 class="panel-title">
                             <a data-toggle="collapse" href="#collapseColumns">
                                 Columns to display
@@ -146,16 +141,31 @@
                         <div id="collapseBasic" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon1">First Name</span>
-                                    <input id="txtFirstName" type="text" class="form-control" placeholder="First Name" aria-describedby="basic-addon1">
+                                    <span class="input-group-addon" id="lblFirst">First Name</span>
+                                    <input id="txtFirstName" type="text" class="form-control" placeholder="First Name" aria-describedby="lblFirst">
                                 </div>
                                 <br>
                                 <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon1">Last Name</span>
-                                    <input id="txtLastName" type="text" class="form-control" placeholder="Last Name" aria-describedby="basic-addon1">
+                                    <span class="input-group-addon" id="lblLast">Last Name</span>
+                                    <input id="txtLastName" type="text" class="form-control" placeholder="Last Name" aria-describedby="lblLast">
                                 </div>
                                 <br> Age <input id="trcAge" type="text" class="span2" value="" data-slider-min="10" data-slider-max="105" data-slider-step="1" data-slider-value="[20,50]" />
                                 <span id="trcAgeSelection">20 - 50</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapseCondition">
+                                Condition and Care
+                            </a>
+                        </h4>
+                        </div>
+                        <div id="collapseCondition" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <label class="checkbox-inline"><input id="chkProfessionallyDiagnosed" style="display:block;" type="checkbox" value="">Professionally diagnosed only</label><br>
+                                List condition check boxes here etc...
                             </div>
                         </div>
                     </div>
@@ -172,20 +182,6 @@
                                 <label class="checkbox-inline"><input type="checkbox" value="">Borough 1</label>
                                 <label class="checkbox-inline"><input type="checkbox" value="">Borough 2</label>
                                 <label class="checkbox-inline"><input type="checkbox" value="">Borough 3</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#collapseCondition">
-                                Condition
-                            </a>
-                        </h4>
-                        </div>
-                        <div id="collapseCondition" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                Check boxes here etc...
                             </div>
                         </div>
                     </div>
@@ -248,6 +244,9 @@
                         </div>
                     </div>
                 </div>
+                <button id="btnUpdate" type="button" class="btn btn-default">
+                <h4 class="panel-title">Search</h4>
+            </button>
             </div>
             <div id="table-of-pals" class="col-sm-8">
                 <table class="table table-responsive table-striped table-bordered">

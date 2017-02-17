@@ -95,13 +95,12 @@ app.get('/getPal',
   }
 )
 
+// TODO we need an /admin path, for managing admin accounts
+
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
-
-    res.render('404page');
- 
-  //have a 404 page now but need it to take away passport. 
-   
+    res.render('404page')
+  //have a 404 page now but need it to take away passport.
 })
 
 const PORT = 8080
