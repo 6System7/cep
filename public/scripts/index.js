@@ -174,9 +174,9 @@ function refreshTable(chosenDataset) {
             hr: chkDOB.value
         });
     }
-      
-    
-    // Always go last because it's the edit button --> goes on end. 
+
+
+    // Always go last because it's the edit button --> goes on end.
     var chkEdit = $("#chkEdit")[0];
     if (chkEdit.checked) {
         columns.push({
@@ -184,7 +184,7 @@ function refreshTable(chosenDataset) {
             hr: chkEdit.value
         })
     }
- 
+
 
     // Load filters
     filters = [];
@@ -212,20 +212,29 @@ function refreshTable(chosenDataset) {
             value: txtLname.val()
         });
     }
-     //filters.push({
-    
 
-    
-
+    // Always apply age filter
     filters.push({
         column: {
             db: "dob",
             hr: "DOB"
         },
         type: "range",
-        //value: "" + minAge + "%" + maxAge
-        value: [minAge, maxAge]
+        value: "" + minAge + "%" + maxAge
+        // value: [minAge, maxAge]
     });
+
+    var chkProfessionallyDiagnosed = $("#chkProfessionallyDiagnosed")[0];
+    if (chkProfessionallyDiagnosed.checked) {
+        filters.push({
+            column: {
+                db: "professionallyDiagnosed", // TODO what is this actually called in db? Is it one column or one per condition?
+                hr: "Professionally Diagnosed"
+            },
+            type: "equals",
+            value: true
+        });
+    };
 
     refreshTableWithFilters(chosenDataset, filters);
 }
@@ -251,9 +260,9 @@ function matchesFilters(pal, filters) {
                 return false;
             }
            // CHECK HERE IF AGE IS IN RANGE???
-       
+
           // return y;
-            
+
         }
     }
     return true;
@@ -336,7 +345,7 @@ var dataset = {
         lastName: "Croall",
         email: "brothermayihavesome@oa.ts",
         dob: x
-        
+
     }, {
         id: 2,
         firstName: "John",
