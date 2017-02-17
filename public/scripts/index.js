@@ -223,8 +223,8 @@ function refreshTable(chosenDataset) {
             hr: "DOB"
         },
         type: "range",
-        //value: "" + minAge + "%" + maxAge
-        value: [minAge, maxAge]
+        value: "" + minAge + "%" + maxAge
+      //  value: [minAge, maxAge]
     });
 
     refreshTableWithFilters(chosenDataset, filters);
@@ -238,22 +238,16 @@ function matchesFilters(pal, filters) {
                 return false;
             }
         } else if (filter.type === "range") {
-            var x = pal.dob;
-            // TODO add age calculation from DOB from db etc blah send help
-            // age needs to be returned
-            var ageDifMs = Date.now() - x.getTime();
-            var ageDate = new Date(ageDifMs); // miliseconds from epoch
-            y = Math.abs(ageDate.getUTCFullYear() - 1970);
-            if (y > filter.value[0] && y < filter.value[1]){
-                return true;
+            if (filter.column.db === "dob") {
+                var xArray = filter.value.split("%")
+                var minAge = parseInt(xArray[0]);
+                var maxAge = parseInt(xArray[1]);
+                var ageDate = new Date(Date.now() - pal[filter.column.db].getTime()); // miliseconds from epoch
+                y = Math.abs(ageDate.getUTCFullYear() - 1970);
+                if (!(y > minAge && y < maxAge)){
+                    return false;
+                } 
             }
-            else {
-                return false;
-            }
-           // CHECK HERE IF AGE IS IN RANGE???
-       
-          // return y;
-            
         }
     }
     return true;

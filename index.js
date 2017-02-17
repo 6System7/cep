@@ -97,8 +97,8 @@ app.get('/getPal',
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
-  res.status(404);
-    res.render('404', {url: '/views/404page.html'});
+
+    res.render('404page');
  
   //have a 404 page now but need it to take away passport. 
    
