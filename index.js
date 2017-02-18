@@ -117,7 +117,8 @@ app.get('/getPal',
         console.log("Retrieval failed: " + err.toString());
       } else {
         console.log("Retrieval success");
-        callback(result);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(result));
       }
     });
   }
