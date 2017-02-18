@@ -65,7 +65,12 @@ function generateRows() {
             var elem = $("<td>");
             if (columns[columnIndex].db) {
                 var column = columns[columnIndex].db;
-                elem.text(filteredDataset.pals[palIndex][column]);
+                if (column == "dob"){
+                     elem.text(filteredDataset.pals[palIndex][column].toLocaleDateString());
+                }
+                else{
+                    elem.text(filteredDataset.pals[palIndex][column]);
+                }
             } else {
                 var column = columns[columnIndex].nodb;
                 if (column === "edit") {
@@ -322,8 +327,8 @@ function generateReport() {
 
 // TODO get dataset from database
  var x = new Date(1971, 08,22)
- var xx = new Date(1911, 08,22)
- //x = x.toLocaleDateString();
+ var xx = new Date(2000, 08,22)
+ //xx = xx.toLocaleDateString();
 var dataset = {
 
  pals: [{
