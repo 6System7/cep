@@ -7,12 +7,29 @@ body {
     margin: 0 auto;
     width:auto;
 }
-h4.thisText{
+h3.thisText{
     color: #7A1211;
      width: 400px;
+    margin-top: 80px;
+    margin-bottom: 20px;
+        
     
 }
-.btn{
-    background: white;
-    
+.btn {
+    background: #7A1211;
+    color: white;
+    border-color: #fff2e6;
+}
+
+.btn:hover {
+    background-color: #ffaa80;
+    border-color: #fff2e6;
+}
+
+.img-responsive {
+    max-width: 40%; /* or to whatever you want here */
+    max-height: auto; /* or to whatever you want here */
+    display: block;
+    margin: 20px;
+    margin-left:1cm;
 }

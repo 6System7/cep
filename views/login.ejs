@@ -7,10 +7,10 @@
     <script src="lib/jquery.min.js"></script>
     <!-- Include bootstrap css and javascript -->
     <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
-    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
     <!-- Include bootstrap slider by http://seiyria.com/ -->
-    <link rel="stylesheet" type="text/css" href="lib/bootstrap-slider.min.css">
-    <script type="text/javascript" src="lib/bootstrap-slider.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap-slider.min.css">
+    <script type="text/javascript" src="bootstrap-slider.min.js"></script>
     <!-- Include our own CSS -->
     <link rel="stylesheet" href="styles/login.css">
     <script type="text/javascript" src="scripts/login.js"></script>
@@ -42,8 +42,9 @@
                         <div class="form-group login-group-checkbox">
                             <input type="checkbox" id="lg_remember" name="lg_remember">
                             <label for="lg_remember"><small>Remember me</small></label>
+                            <!-- TODO : Do the want this??-->
                         </div>
-                        <input type="submit" value="Submit" />
+                        <input class = "btn btn-default" type="submit" value="Submit" />
                         <!--<button type="submit" class="btn btn-default" onclick="location.href = 'index.html';">Submit</button>
                         <!-- TODO: CHANGE THIS (submit button?) -->
                     </div>
@@ -51,10 +52,6 @@
             </div>
         </div>
     </div>
-
-    <!-- TODO: this is the page to login, does it need a log out button?? -->
-    <button class="btn" type="button" id="logOutBtn" onclick="location.href = '404page.html';"> Log Out</button>
-
 
 </body>
 

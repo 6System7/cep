@@ -5,9 +5,11 @@
     <!-- Include jQuery for AJAX calls -->
     <script src="../public/lib/jquery.min.js"></script>
     <!-- Include bootstrap css and javascript -->
-    <link rel="stylesheet" type="text/css" href="../public/lib/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="../public/lib/bootstrap.min.css">
     <script type="text/javascript" src="../public/lib/bootstrap.min.js"></script>
     <!-- Include our own CSS -->
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
+    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
     <link rel="stylesheet"  href="styles/404page.css">
     <!-- Set meta for bootstrap to enable mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,12 +17,15 @@
 <body>
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
-        <div class = "container" id="text" align = "center" > 
-       
+        <div class = "container" id="text" align = "center"  > 
+        <br>
+       <!-- <img src="img/cropped_logo.png" class="img-responsive">
+        <br>-->
 
-        <h4 class = "thisText"> <br><br><br>Sorry, this page does not exist </h4>
+        <h3   class = "thisText"> Sorry, this page does not exist! </h3>
         <button class="btn btn-default" type="button" id = "homeBtn" onclick = "location.href = 'index.ejs';"> Home </button>
         <button class = "btn btn-default" type = "button" id = "logOutBtn" onclick = "location.href = 'login.ejs';"> Log Out</button>
+            <img src="img/mini_logo.png" class="img-responsive" href= "index.ejs">
             <!-- TODO Log out button needs to remove security permissions-->
         </div>
      

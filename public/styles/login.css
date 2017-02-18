@@ -31,3 +31,14 @@ max-height: auto; /* or to whatever you want here */
 #lg_remember {
     color: white;
 }
+
+.btn {
+    background: #7A1211;
+    color: white;
+    border-color: #fff2e6;
+}
+
+.btn:hover {
+    background-color: #ffaa80;
+    border-color: #fff2e6;
+}
