@@ -30,10 +30,13 @@ passport.deserializeUser(function(id, cb) {
 // Connection URL
 // TODO replace to whatever this should be
 var dbURL = 'mongodb://localhost:27017/myproject';
+var db;
 // Use connect method to connect to the Server
-MongoClient.connect(dbURL, function(err, db) {
+MongoClient.connect(dbURL, function(err, dbIN) {
   //assert.equal(null, err);
+  if (err) { console.log("Failed to connect to database", err); }
   console.log("Connected correctly to server");
+  db = dbIN;
   //db.close();
 });
 
@@ -88,7 +91,7 @@ app.post('/addPal',
     //TODO
     //Get the required parameters
     var dataset = req.body.dataset;
-    
+
     //Since all data is in a single document, no separation of data is needed
     //Simply insert the dataset into the collection
     var collection = db.collection('pals');
@@ -109,7 +112,6 @@ app.get('/getPal',
   function(req, res) {
     //Takes a function as input and calls it with a list of all PALs in the database as a parameter
     //TODO
-    var callback = req.param.cb;
     //Get the PALs
     var collection = db.collection('pals');
     var pals = collection.find().toArray(function (err, result) {

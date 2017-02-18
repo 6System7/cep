@@ -10,7 +10,10 @@ $(document).ready(function() {
     initialiseAgeSlider();
 
     // Generate table
-    refreshTable(dataset);
+    $.ajax("getPal").done(function(palsIN) {
+        dataset = {"pals": palsIN};
+        refreshTable(dataset);
+    });
 
     // Attach search button callback
     $("#btnUpdate").click(function() {
@@ -179,9 +182,9 @@ function refreshTable(chosenDataset) {
             hr: chkDOB.value
         });
     }
-      
-    
-    // Always go last because it's the edit button --> goes on end. 
+
+
+    // Always go last because it's the edit button --> goes on end.
     var chkEdit = $("#chkEdit")[0];
     if (chkEdit.checked) {
         columns.push({
@@ -189,7 +192,7 @@ function refreshTable(chosenDataset) {
             hr: chkEdit.value
         })
     }
- 
+
 
     // Load filters
     filters = [];
@@ -217,7 +220,7 @@ function refreshTable(chosenDataset) {
             value: txtLname.val()
         });
     }
-    
+
     var chkProfessionallyDiagnosed = $("#chkProfessionallyDiagnosed")[0];
     if (chkProfessionallyDiagnosed.checked) {
         filters.push({
@@ -259,7 +262,7 @@ function matchesFilters(pal, filters) {
                 y = Math.abs(ageDate.getUTCFullYear() - 1970);
                 if (!(y > minAge && y < maxAge)){
                     return false;
-                } 
+                }
             }
         }
     }
@@ -299,9 +302,13 @@ function alterOrAddPal(pal) {
         dataset.pals.push(pal);
     }
     // TODO send new/altered pal info to server
+    $.post("addPal", {"dataset": dataset.pals});
 
     // Now regenerate rows to show new info
-    refreshTable(dataset);
+    $.ajax("getPal").done(function(pals) {
+        dataset = pals;
+        refreshTable(dataset);
+    });
 }
 
 function generateReport() {
@@ -324,34 +331,36 @@ function generateReport() {
     google.charts.setOnLoadCallback(genReport(data));
 }
 
-
-// TODO get dataset from database
- var x = new Date(1971, 08,22)
- var xx = new Date(2000, 08,22)
+ // var x = new Date(1971, 08,22)
+ // var xx = new Date(2000, 08,22)
  //xx = xx.toLocaleDateString();
+// var dataset = {
+//
+//  pals: [{
+//         id: 0,
+//         firstName: "Maddy",
+//         lastName: "Sands",
+//         email: "hereareyour@oa.ts",
+//         dob: x
+//     }, {
+//         id: 1,
+//         firstName: "Mike",
+//         lastName: "Croall",
+//         email: "brothermayihavesome@oa.ts",
+//         dob: x
+//
+//     }, {
+//         id: 2,
+//         firstName: "John",
+//         lastName: "Doe",
+//         email: "john@doe.zz.vc",
+//         dob: xx
+//     }]
+// };
 var dataset = {
-
- pals: [{
-        id: 0,
-        firstName: "Maddy",
-        lastName: "Sands",
-        email: "hereareyour@oa.ts",
-        dob: x
-    }, {
-        id: 1,
-        firstName: "Mike",
-        lastName: "Croall",
-        email: "brothermayihavesome@oa.ts",
-        dob: x
-        
-    }, {
-        id: 2,
-        firstName: "John",
-        lastName: "Doe",
-        email: "john@doe.zz.vc",
-        dob: xx
-    }]
+    pals: []
 };
+
 var filteredDataset = {
     pals: []
 };
