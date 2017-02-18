@@ -16,7 +16,7 @@
 	"personal_info": id
 }
 
-//Further Personal Info document design
+//personal_info document design
 
 {
 	"_id": ObjectId(DEADBEEF0001),
@@ -29,15 +29,18 @@
 		"data": True/False,
 		"further_contact": True/False,
 		"promotion": True/False,
-		"artwork reproduction/sale": True/False,
+		"artwork_sale": True/False,
 		"detail": "any further detail provided"
 	},
 	"referral": "name",
 	"date_registered": Date(),
-	"venue": "name"
+	"venue": "name",
+	"aap_area": "text",
+	"electoral_division": "text",
+	"ward": "text"
 }
 
-//Project document design
+//projects document design
 
 {
 	"_id": ObjectId(DEADBEEF0002),
@@ -45,23 +48,23 @@
 	"status": "project_status"
 }
 
-//Contact Details document design
+//contact_info document design
 
 {
 	"_id": ObjectId(DEADBEEF0003),
 	"street": "text",
-        "postcode": "DH1 3EE",
-        "city": "Durham",
+	"postcode": "DH1 3EE",
+	"city": "Durham",
 	"telephone": "0123456789",
 	"mobile": "0012325423",
 	"email": "example@email.com"
 }
 
-//Medical Details document design
+//medical_info document design
 
 {
 	"_id": ObjectId(DEADBEEF0004),
-	"emergency contact": {
+	"emergency_contact": {
 		"firstname": "name",
 		"surname": "lastname",
 		"relationship": "relation",
@@ -71,13 +74,15 @@
 	"disability": True/False,
 	"conditions": [
 		"type": "physical"/"mental health"/"sensory"/"cognitive",
-		"details": "any further details provided"
+		"details": "any further details provided",
+		"diagnosed": True/False
 	],
 	"extra_help": True/False,
-	"carer": "Y"/"N"/"Parttime"/"Fulltime"/"N/A"
+	"carer": "Y"/"N"/"Parttime"/"Fulltime"/"N/A",
+	"care_coordinator": 
 }
 
-//GP document design
+//gp document design
 
 {
 	"_id": ObjectId(DEADBEEF0005),
@@ -85,7 +90,7 @@
 	"surname": "name",
 	"practice_name": "name",
 	"street": "text",
-        "postcode": "DH1 3EE",
-        "city": "Durham",
+	"postcode": "DH1 3EE",
+	"city": "Durham",
 	"telephone": "number"
 }
