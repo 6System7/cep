@@ -1,0 +1,68 @@
+//PAL document design
+
+{
+	"_id": ObjectId(DEADBEEF0000),
+	"firstname": "name",
+	"surname": "lastname",
+	"dateofbirth": Date(),
+	"age": 70,
+	"gender": "M"/"F",
+	"projects": [
+		{
+            "project_name": "project_name",
+            "status": "project_status"
+        },
+        {
+            "project_name": "project_name",
+            "status": "project_status"
+        }
+	],
+    "emergency_contact": {
+        "firstname": "name",
+        "surname": "lastname",
+        "relationship": "relation",
+        "telephone": "number"
+    },
+    "gp": {
+        "firstname": "name",
+        "surname": "name",
+        "practice_name": "name",
+        "street": "text",
+        "postcode": "DH1 3EE",
+        "city": "Durham",
+        "telephone": "number"
+    },
+    "disability": True/False,
+    "conditions": [
+        "type": "physical"/"mental health"/"sensory"/"cognitive",
+        "details": "any further details provided",
+        "diagnosed": True/False
+    ],
+    "extra_help": True/False,
+    "carer": "Y"/"N"/"Parttime"/"Fulltime"/"N/A",
+    "care_coordinator": True/False,
+    "street": "text",
+    "postcode": "DH1 3EE",
+    "city": "Durham",
+    "telephone": "0123456789",
+    "mobile": "0012325423",
+    "email": "example@email.com",
+    "relationship_status": "married",
+    "ethnic_origin": "white british",
+    "sexual_orientation": "",
+    "employment_status": "retired",
+    "consent": {
+        "photo": True/False,
+        "data": True/False,
+        "further_contact": True/False,
+        "promotion": True/False,
+        "artwork_sale": True/False,
+        "detail": "any further detail provided"
+    },
+    "referral": "name",
+    "date_registered": Date(),
+    "venue": "name",
+    "aap_area": "text",
+    "electoral_division": "text",
+    "ward": "text"
+}
