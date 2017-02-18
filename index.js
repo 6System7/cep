@@ -84,14 +84,42 @@ app.get('/addPal',
 app.post('/addPal',
   //connectEnsure.ensureLoggedIn('/login'),
   function(req, res) {
+    //Takes an updated dataset (in JSON format) as input and writes all data to the database
     //TODO
+    //Get the required parameters
+    var dataset = req.body.dataset;
+    
+    //Since all data is in a single document, no separation of data is needed
+    //Simply insert the dataset into the collection
+    var collection = db.collection('pals');
+    for (index in dataset) {
+      collection.save(dataset[index], function(err, results) {
+        if (err){
+          console.log("Update failed: " + err.toString());
+        } else {
+          console.log("Update success");
+        }
+      });
+    }
   }
 )
 
 app.get('/getPal',
   //connectEnsure.ensureLoggedIn('/login'),
   function(req, res) {
+    //Takes a function as input and calls it with a list of all PALs in the database as a parameter
     //TODO
+    var callback = req.param.cb;
+    //Get the PALs
+    var collection = db.collection('pals');
+    var pals = collection.find().toArray(function (err, result) {
+      if (err) {
+        console.log("Retrieval failed: " + err.toString());
+      } else {
+        console.log("Retrieval success");
+        callback(result);
+      }
+    });
   }
 )
 
