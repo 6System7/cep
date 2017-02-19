@@ -8,25 +8,33 @@ var bodyParser = require("body-parser");
 
 //  Passport setup
 passport.use(new Strategy(
-  function(username, password, cb) {
-    db.users.findByUsername(username, function(err, user) {
-      if (err) { return cb(err) }
-      if (!user) { return cb(null, false) }
-      if (user.password != password) { return cb(null, false) }
-      return cb(null, user)
-    })
-  }
+    function(username, password, cb) {
+        db.users.findByUsername(username, function(err, user) {
+            if (err) {
+                return cb(err)
+            }
+            if (!user) {
+                return cb(null, false)
+            }
+            if (user.password != password) {
+                return cb(null, false)
+            }
+            return cb(null, user)
+        })
+    }
 ))
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id)
+    cb(null, user.id)
 })
 
 passport.deserializeUser(function(id, cb) {
-  db.users.findById(id, function (err, user) {
-    if (err) { return cb(err) }
-    cb(null, user)
-  })
+    db.users.findById(id, function(err, user) {
+        if (err) {
+            return cb(err)
+        }
+        cb(null, user)
+    })
 })
 
 // Connection URL
@@ -35,11 +43,13 @@ var dbURL = 'mongodb://localhost:27017/myproject';
 var db;
 // Use connect method to connect to the Server
 MongoClient.connect(dbURL, function(err, dbIN) {
-  //assert.equal(null, err);
-  if (err) { console.log("Failed to connect to database", err); }
-  console.log("Connected correctly to server");
-  db = dbIN;
-  //db.close();
+    //assert.equal(null, err);
+    if (err) {
+        console.log("Failed to connect to database", err);
+    }
+    console.log("Connected correctly to server");
+    db = dbIN;
+    //db.close();
 });
 
 var app = express()
@@ -47,90 +57,91 @@ var app = express()
 app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'))
 app.use(express.static('public'))
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json());
 
 app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 
 app.use(require('express-session')({
-  secret: 'Brother, May I have some oats?',
-  resave: false,
-  saveUninitialized: false }
-))
+    secret: 'Brother, May I have some oats?',
+    resave: false,
+    saveUninitialized: false
+}))
 
 app.use(passport.initialize())
 app.use(passport.session())
 
 app.get('/',
-  //connectEnsure.ensureLoggedIn('/login'),
-  function(req, res) {
-    res.render('index')
-})
+    //connectEnsure.ensureLoggedIn('/login'),
+    function(req, res) {
+        res.render('index')
+    })
 
 app.get('/login',
-  function(req, res) {
-    res.render('login')
-})
+    function(req, res) {
+        res.render('login')
+    })
 
 app.post('/login',
-  passport.authenticate(
-    'local',
-    {
-      successReturnToOrRedirect: '/',
-      failureRedirect: '/login'
-    }
-  )
+    passport.authenticate(
+        'local', {
+            successReturnToOrRedirect: '/',
+            failureRedirect: '/login'
+        }
+    )
 )
 
 app.get('/addPal',
-  //connectEnsure.ensureLoggedIn('/login'),
-  function(req, res) {
-    res.render('addPal')
-  }
+    //connectEnsure.ensureLoggedIn('/login'),
+    function(req, res) {
+        res.render('addPal')
+    }
 )
 
 app.post('/addPal',
-  //connectEnsure.ensureLoggedIn('/login'),
-  function(req, res) {
-    //Takes an updated dataset (in JSON format) as input and writes all data to the database
-    //Get the required parameters
-    var dataset = req.body.pals;
+    //connectEnsure.ensureLoggedIn('/login'),
+    function(req, res) {
+        //Takes an updated dataset (in JSON format) as input and writes all data to the database
+        //Get the required parameters
+        var dataset = req.body.pals;
 
-    //Since all data is in a single document, no separation of data is needed
-    //Simply insert the dataset into the collection
-    var collection = db.collection('pals');
-    for (index in dataset) {
-        console.log("Saving", index);
-      collection.save(dataset[index], function(err, results) {
-        if (err){
-          console.log("Update failed: " + err.toString());
-        } else {
-          console.log("Update success");
+        //Since all data is in a single document, no separation of data is needed
+        //Simply insert the dataset into the collection
+        var collection = db.collection('pals');
+        for (index in dataset) {
+            console.log("Saving", index);
+            collection.save(dataset[index], function(err, results) {
+                if (err) {
+                    console.log("Update failed: " + err.toString());
+                } else {
+                    console.log("Update success");
+                }
+            });
         }
-      });
+        res.send('done');
     }
-    res.send('done');
-  }
 )
 
 app.get('/getPal',
-  //connectEnsure.ensureLoggedIn('/login'),
-  function(req, res) {
-    //Takes a function as input and calls it with a list of all PALs in the database as a parameter
-    //TODO
-    //Get the PALs
-    var collection = db.collection('pals');
-    var pals = collection.find().toArray(function (err, result) {
-      if (err) {
-        console.log("Retrieval failed: " + err.toString());
-      } else {
-        console.log("Retrieval success");
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result));
-      }
-    });
-  }
+    //connectEnsure.ensureLoggedIn('/login'),
+    function(req, res) {
+        //Takes a function as input and calls it with a list of all PALs in the database as a parameter
+        //TODO
+        //Get the PALs
+        var collection = db.collection('pals');
+        var pals = collection.find().toArray(function(err, result) {
+            if (err) {
+                console.log("Retrieval failed: " + err.toString());
+            } else {
+                console.log("Retrieval success");
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
+            }
+        });
+    }
 )
 
 // TODO we need an /admin path, for managing admin accounts
@@ -138,10 +149,10 @@ app.get('/getPal',
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
     res.render('404page')
-  //have a 404 page now but need it to take away passport.
+    //have a 404 page now but need it to take away passport.
 })
 
 const PORT = 8080
-app.listen(PORT, function () {
-  console.log('Web Services App listening on port ' + PORT)
+app.listen(PORT, function() {
+    console.log('Web Services App listening on port ' + PORT)
 })

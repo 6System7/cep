@@ -59,19 +59,21 @@ function generateRows() {
     var tableBody = $("#tBodyPals");
     tableBody.empty();
     for (var palIndex = 0; palIndex < filteredDataset.pals.length; palIndex++) {
+        var pal = filteredDataset.pals[palIndex];
         var row = $("<tr>");
 
         for (var columnIndex = 0; columnIndex < columns.length; columnIndex++) {
             var elem = $("<td>");
             if (columns[columnIndex].db) {
                 var column = columns[columnIndex].db;
-                if(filteredDataset.pals[palIndex][column]) {
+                if (filteredDataset.pals[palIndex][column]) {
                     if (column == "dob") {
-                         elem.text(filteredDataset.pals[palIndex][column].toLocaleDateString());
+                        var dobString = pal.dob.getUTCFullYear() + "/" + (1 + pal.dob.getUTCMonth()) + "/" + pal.dob.getDate();
+                        elem.text(dobString);
                     } else {
                         elem.text(filteredDataset.pals[palIndex][column]);
                     }
-                }else {
+                } else {
                     elem.text("-");
                 }
             } else {
@@ -238,7 +240,6 @@ function refreshTable(chosenDataset) {
         },
         type: "range",
         value: "" + minAge + "%" + maxAge
-      //  value: [minAge, maxAge]
     });
 
     refreshTableWithFilters(chosenDataset, filters);
@@ -258,7 +259,7 @@ function matchesFilters(pal, filters) {
                 var maxAge = parseInt(xArray[1]);
                 var ageDate = new Date(Date.now() - pal[filter.column.db].getTime()); // miliseconds from epoch
                 y = Math.abs(ageDate.getUTCFullYear() - 1970);
-                if (!(y > minAge && y < maxAge)){
+                if (!(y >= minAge && y <= maxAge)) {
                     return false;
                 }
             }
@@ -290,7 +291,7 @@ function alterOrAddPal(pal) {
         contentType: 'application/json',
         dataType: "json",
         data: JSON.stringify({
-            pals:[pal]
+            pals: [pal]
         })
     }).always(function() {
         loadAllPals();
@@ -320,35 +321,22 @@ function generateReport() {
 function loadAllPals() {
     // Now regenerate rows to show new info
     $.ajax("getPal").done(function(pals) {
-        /*for (var palIndex = 0; palIndex < dataset.pals.length; palIndex++){
-          ///  var column = columns[columnIndex].db;
-                //if(filteredDataset.pals[palIndex][column]) {
-                    //if (column == "dob") {
-                      ///   elem.text(filteredDataset.pals[palIndex][column];
-                dataset.pals[palIndex].dob.value = new Date(dataset.pals[palIndex].dob.value);
+        dataset = {
+            "pals": pals
+        };
+        for (var palIndex = 0; palIndex < dataset.pals.length; palIndex++) {
+            if (dataset.pals[palIndex].dob && typeof dataset.pals[palIndex].dob === 'string') {
+                dataset.pals[palIndex].dob = new Date(dataset.pals[palIndex].dob);
+            }
         }
-       */
-        
-      
-         /* ///  var column = columns[columnIndex].db;
-                //if(filteredDataset.pals[palIndex][column]) {
-                    //if (column == "dob") {
-                      ///   elem.text(filteredDataset.pals[palIndex][column];
-                pals[palIndex].dob.value = new Date(pals[palIndex].dob.value;
-        */
-        dataset = {"pals": pals};
-       for (var palIndex = 0; palIndex < dataset.pals.length; palIndex++){
-            alert(dataset.pals[palIndex].dob);
-           dataset.pals[palIndex].dob = new Date( dataset.pals[palIndex].dob);
-        }
-        
+
         refreshTable(dataset);
     });
 }
 
- // var x = new Date(1971, 08, 22)
- // var xx = new Date(1981, 08, 22)
- //xx = xx.toLocaleDateString();
+// var x = new Date(1971, 08, 22)
+// var xx = new Date(1981, 08, 22)
+//xx = xx.toLocaleDateString();
 // var dataset = {
 //
 //  pals: [{

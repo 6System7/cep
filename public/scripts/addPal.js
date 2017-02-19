@@ -1,21 +1,26 @@
-$(document).ready(function(){
+$(document).ready(function() {
     var $body = $(window.frameElement).parents('body'),
-    dlg = $body.find('#myModal');
-    
-    $(dlg).on('hide.bs.modal', function (e) {
-         $('#confirmationModal').modal('toggle');
+        dlg = $body.find('#myModal');
+
+    $(dlg).on('hide.bs.modal', function(e) {
+        $('#confirmationModal').modal('toggle');
         // TODO figure this out
-        
-            
-    
+
+
+
     })
 })
+
 function editPal(pal) {
     $("#palStore").data("pal", pal);
     $("#firstName").val(pal.firstName);
     $("#lastName").val(pal.lastName);
     $("#email").val(pal.email);
-    $("#dob").val(pal.dob);
+
+    if (pal.dob) {
+        var dobString = pal.dob.getUTCFullYear() + "/" + (1 + pal.dob.getMonth()) + "/" + pal.dob.getDate();
+        $("#dob").val(dobString);
+    }
 
     $("#firstName").focus();
 }
@@ -30,7 +35,7 @@ function getPalFromInputs() {
     pal.lastName = $("#lastName").val();
     pal.email = $("#email").val();
     pal.dob = $("#dob").val();
-    
+
     // TODO remember to update
     return pal;
 }
@@ -49,10 +54,10 @@ function submitFunc() {
 }
 
 
-function deletePalFunc(){
+function deletePalFunc() {
     //  grab pal - need path to delete
-    
-    
+
+
     /*
     var pal = $("#palStore").data("pal");
     $.ajax({
@@ -61,15 +66,14 @@ function deletePalFunc(){
         success: function(){
         //refresh page
     }
-        
+
     })
     */
-    
+
     // make request to server with pal
-   //window.parent.alterOrAddPal(getPalFromInputs());
-    
-    
+    //window.parent.alterOrAddPal(getPalFromInputs());
 
-    
+
+
+
 }
-
