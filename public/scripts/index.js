@@ -320,7 +320,28 @@ function generateReport() {
 function loadAllPals() {
     // Now regenerate rows to show new info
     $.ajax("getPal").done(function(pals) {
+        /*for (var palIndex = 0; palIndex < dataset.pals.length; palIndex++){
+          ///  var column = columns[columnIndex].db;
+                //if(filteredDataset.pals[palIndex][column]) {
+                    //if (column == "dob") {
+                      ///   elem.text(filteredDataset.pals[palIndex][column];
+                dataset.pals[palIndex].dob.value = new Date(dataset.pals[palIndex].dob.value);
+        }
+       */
+        
+      
+         /* ///  var column = columns[columnIndex].db;
+                //if(filteredDataset.pals[palIndex][column]) {
+                    //if (column == "dob") {
+                      ///   elem.text(filteredDataset.pals[palIndex][column];
+                pals[palIndex].dob.value = new Date(pals[palIndex].dob.value;
+        */
         dataset = {"pals": pals};
+       for (var palIndex = 0; palIndex < dataset.pals.length; palIndex++){
+            alert(dataset.pals[palIndex].dob);
+           dataset.pals[palIndex].dob = new Date( dataset.pals[palIndex].dob);
+        }
+        
         refreshTable(dataset);
     });
 }

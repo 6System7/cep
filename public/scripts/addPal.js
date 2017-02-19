@@ -15,6 +15,7 @@ function editPal(pal) {
     $("#firstName").val(pal.firstName);
     $("#lastName").val(pal.lastName);
     $("#email").val(pal.email);
+    $("#dob").val(pal.dob);
 
     $("#firstName").focus();
 }
@@ -28,6 +29,7 @@ function getPalFromInputs() {
     pal.firstName = $("#firstName").val();
     pal.lastName = $("#lastName").val();
     pal.email = $("#email").val();
+    pal.dob = $("#dob").val();
     
     // TODO remember to update
     return pal;
