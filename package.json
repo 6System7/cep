@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/6System7/cep#readme",
   "dependencies": {
+    "body-parser": "^1.16.1",
     "chartjs": "^0.3.24",
     "connect-ensure-login": "^0.1.1",
     "ejs": "^2.5.5",

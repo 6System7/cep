@@ -10,10 +10,7 @@ $(document).ready(function() {
     initialiseAgeSlider();
 
     // Generate table
-    $.ajax("getPal").done(function(palsIN) {
-        dataset = {"pals": palsIN};
-        refreshTable(dataset);
-    });
+    loadAllPals();
 
     // Attach search button callback
     $("#btnUpdate").click(function() {
@@ -68,11 +65,14 @@ function generateRows() {
             var elem = $("<td>");
             if (columns[columnIndex].db) {
                 var column = columns[columnIndex].db;
-                if (column == "dob"){
-                     elem.text(filteredDataset.pals[palIndex][column].toLocaleDateString());
-                }
-                else{
-                    elem.text(filteredDataset.pals[palIndex][column]);
+                if(filteredDataset.pals[palIndex][column]) {
+                    if (column == "dob") {
+                         elem.text(filteredDataset.pals[palIndex][column].toLocaleDateString());
+                    } else {
+                        elem.text(filteredDataset.pals[palIndex][column]);
+                    }
+                }else {
+                    elem.text("-");
                 }
             } else {
                 var column = columns[columnIndex].nodb;
@@ -150,7 +150,7 @@ function refreshTable(chosenDataset) {
     var chkId = $("#chkID")[0];
     if (chkId.checked) {
         columns.push({
-            db: "id",
+            db: "_id",
             hr: chkId.value
         });
     }
@@ -183,7 +183,6 @@ function refreshTable(chosenDataset) {
         });
     }
 
-
     // Always go last because it's the edit button --> goes on end.
     var chkEdit = $("#chkEdit")[0];
     if (chkEdit.checked) {
@@ -192,7 +191,6 @@ function refreshTable(chosenDataset) {
             hr: chkEdit.value
         })
     }
-
 
     // Load filters
     filters = [];
@@ -254,7 +252,7 @@ function matchesFilters(pal, filters) {
                 return false;
             }
         } else if (filter.type === "range") {
-            if (filter.column.db === "dob") {
+            if (filter.column.db === "dob" && pal[filter.column.db]) {
                 var xArray = filter.value.split("%")
                 var minAge = parseInt(xArray[0]);
                 var maxAge = parseInt(xArray[1]);
@@ -286,28 +284,16 @@ function sortByColumn(chosenDataset, db, modifier = 1) {
 }
 
 function alterOrAddPal(pal) {
-    if (pal.hasOwnProperty("id")) {
-        for (var i = 0; i < dataset.pals.length; i++) {
-            if (dataset.pals[i].id && dataset.pals[i].id === pal.id) {
-                // If same pal, update them
-                dataset.pals[i] = pal;
-                // Stop checking (IDs are unique)
-                break;
-            }
-        }
-    } else {
-        console.log("No ID found, let database generate one for new pal");
-        /* Pal NEEDS an ID for adding/editing to work properly TODO make id come from database auto-gen (send updated pal to server, wait for pal back with ID?)*/
-        pal.id = (new Date()).getTime();
-        dataset.pals.push(pal);
-    }
-    // TODO send new/altered pal info to server
-    $.post("addPal", {"dataset": dataset.pals});
-
-    // Now regenerate rows to show new info
-    $.ajax("getPal").done(function(pals) {
-        dataset = pals;
-        refreshTable(dataset);
+    $.ajax({
+        method: "POST",
+        url: "addPal",
+        contentType: 'application/json',
+        dataType: "json",
+        data: JSON.stringify({
+            pals:[pal]
+        })
+    }).always(function() {
+        loadAllPals();
     });
 }
 
@@ -318,7 +304,7 @@ function generateReport() {
     // Extract pal arrays for report gen
     var databaseFR = dataset.pals;
     var filteredDatabaseFR = filteredDataset.pals;
-    // Remove non-database columns (such as edit), and pass in 'db' names
+    // Remove non-database columns (such as edit)
     var columnsFR = columns.filter(c => c.hasOwnProperty("db")); //.map(c => c.db);
 
     var data = {
@@ -331,8 +317,16 @@ function generateReport() {
     google.charts.setOnLoadCallback(genReport(data));
 }
 
- // var x = new Date(1971, 08,22)
- // var xx = new Date(2000, 08,22)
+function loadAllPals() {
+    // Now regenerate rows to show new info
+    $.ajax("getPal").done(function(pals) {
+        dataset = {"pals": pals};
+        refreshTable(dataset);
+    });
+}
+
+ // var x = new Date(1971, 08, 22)
+ // var xx = new Date(1981, 08, 22)
  //xx = xx.toLocaleDateString();
 // var dataset = {
 //

@@ -4,6 +4,8 @@ var MongoClient = require('mongodb').MongoClient
 var passport = require('passport')
 var Strategy = require('passport-local').Strategy
 var connectEnsure = require('connect-ensure-login')
+var bodyParser = require("body-parser");
+
 //  Passport setup
 passport.use(new Strategy(
   function(username, password, cb) {
@@ -44,6 +46,10 @@ var app = express()
 
 app.use('/pdf', express.static(__dirname + '/node_modules/pdfmake/build'))
 app.use(express.static('public'))
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 
@@ -88,14 +94,14 @@ app.post('/addPal',
   //connectEnsure.ensureLoggedIn('/login'),
   function(req, res) {
     //Takes an updated dataset (in JSON format) as input and writes all data to the database
-    //TODO
     //Get the required parameters
-    var dataset = req.body.dataset;
+    var dataset = req.body.pals;
 
     //Since all data is in a single document, no separation of data is needed
     //Simply insert the dataset into the collection
     var collection = db.collection('pals');
     for (index in dataset) {
+        console.log("Saving", index);
       collection.save(dataset[index], function(err, results) {
         if (err){
           console.log("Update failed: " + err.toString());
@@ -104,6 +110,7 @@ app.post('/addPal',
         }
       });
     }
+    res.send('done');
   }
 )
 
