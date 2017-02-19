@@ -10,3 +10,23 @@ p {
     color: white;
     border-color: white;
 }
+.modal-header {
+    background-color: white;
+    color: black;
+}
+
+.modal-body {
+    background-color: white;
+    color: black;
+}
+.modal-content {
+    border: 10px double white;
+}
+#confirmDeleteBtn{
+    background-color: #ffc299;
+    border-color: #7A1211;
+}
+#cancelDeleteBtn{
+    background-color: #ffc299;
+    border-color: #7A1211;
+}
