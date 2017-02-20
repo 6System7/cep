@@ -64,5 +64,8 @@
     "venue": "name",
     "aap_area": "text",
     "electoral_division": "text",
-    "ward": "text"
+    "ward": "text",
+    "lower_layer_SOA": "E01000001",
+    "middlelayer_SOA": "E02000001",
+    "local_authority_area": "Durham"
 }
