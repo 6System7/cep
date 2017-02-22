@@ -3,19 +3,44 @@
  * Requires PDFMake and Google Charts to work.
  */
 
+const NUM_AGE_RANGES = 5;
+const NUM_RELATIONSHIP_STATUSES = 7;
+const NUM_ELECTORAL_DIVISIONS = 63;
+const NUM_AAP_AREAS = 14;
+const NUM_MENTAL_HEALTH_STATUSES = 14;
+const NUM_REFERRAL_ROUTES = 6;
+
 function genReport(reportData) {
     console.log("generating report...");
 
-    genGraphs(reportData);
+    var tableData = genTableData(reportData);
+    var statData = genStatData(reportData);
+    var filterData = genFilterData(reportData);
+
+    genGraphs(tableData, filterData, statData);
 }
 
-function genPDF(reportData, graphs) {
+function genTableData(reportData){
 
-    //var database = reportData.database;
     var columns = reportData.columns;
     var filters = reportData.filters;
     var filteredDatabase = reportData.filteredDatabase;
+
+    return filteredTable(filteredDatabase, columns, filters);
+}
+
+function genStatData(reportData){
+    return statisticsList(reportData.filteredDatabase);
+}
+
+function genFilterData(reportData){
+    return filterList(reportData.filters);
+}
+
+function genPDF(filteredTable, filters, stats, graphs) {
+
     var today = new Date();
+    var statisticList = stats.list;
 
     var docDefinition = {
         content: [{
@@ -32,7 +57,7 @@ function genPDF(reportData, graphs) {
                 fontSize: 14,
                 bold: true
             },
-            filteredTable(filteredDatabase, columns, filters),
+            filteredTable,
             {
                 text: '\n\nFilters applied',
                 style: 'header',
@@ -40,7 +65,7 @@ function genPDF(reportData, graphs) {
                 bold: true
             },
             {
-                ol: filterList(filters)
+                ol: filters
             },
             {
                 text: '\n\nStatistics',
@@ -49,7 +74,7 @@ function genPDF(reportData, graphs) {
                 bold: true
             },
             {
-                ol: statisticsList(filteredDatabase)
+                ol: statisticList
             },
             {
                 text: '\n\nGraphical Data',
@@ -68,7 +93,7 @@ function genPDF(reportData, graphs) {
 
 }
 
-function genGraphs(reportData){
+function genGraphs(tableData, filterData, stats) {
 
     /**
      * @param chart         The basic Chart object .
@@ -77,37 +102,142 @@ function genGraphs(reportData){
      * @param google
      * @param google.visualization
      * @param google.visualization.ColumnChart
+     * @param google.visualization.PieChart
      */
 
-    var ageRangeGraphDetails = genAgeRangeGraph();
-    var relationshipStatusGraphDetails = genRelationshipStatusGraph();
-    var electoralDivisionGraphDetails = genElectoralDivisionGraph();
-    var aapAreaGraphDetails = genAAPAreaGraph();
-    var mentalHealthInfoGraphDetails = genMentalHealthInfoGraph();
-    var referralRouteGraphDetails = genReferralRouteGraph();
+    var statData = stats.data;
+
+    var ageRangeGraphDetails = genAgeRangeGraphs(statData);
+    var relationshipStatusGraphDetails = genRelationshipStatusGraphs(statData);
+    var electoralDivisionGraphDetails = genElectoralDivisionGraphs(statData);
+    var aapAreaGraphDetails = genAAPAreaGraphs(statData);
+    var mentalHealthInfoGraphDetails = genMentalHealthInfoGraphs(statData);
+    var referralRouteGraphDetails = genReferralRouteGraphs(statData);
 
     var chartURIs = [];
 
-    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-    chart.draw(ageRangeGraphDetails.data, ageRangeGraphDetails.options);
-    chartURIs.push(chart.getImageURI());
-    //chart.draw(relationshipStatusGraphDetails.data, relationshipStatusGraphDetails.options);
-    //chartURIs.push(chart.getImageURI());
-    //chart.draw(electoralDivisionGraphDetails.data, electoralDivisionGraphDetails.options);
-    //chartURIs.push(chart.getImageURI());
-    //chart.draw(aapAreaGraphDetails.data, aapAreaGraphDetails.options);
-    //chartURIs.push(chart.getImageURI());
-    //chart.draw(mentalHealthInfoGraphDetails.data, mentalHealthInfoGraphDetails.options);
-    //chartURIs.push(chart.getImageURI());
-    //chart.draw(referralRouteGraphDetails.data, referralRouteGraphDetails.options);
-    //chartURIs.push(chart.getImageURI());
-    //google.visualization.events.addListener(chart, 'ready', function () {
-    genPDF(reportData, chartURIs);
-    //});
+    var columnChart = new google.visualization.ColumnChart(document.getElementById('columnChart_div'));
+    var pieChart = new google.visualization.PieChart(document.getElementById('pieChart_div'));
+    var totalNumOfCharts = 12;
+
+    google.visualization.events.addOneTimeListener(columnChart, 'ready', function () {
+        console.log("Age Range Column Chart Generated");
+        chartURIs.push(columnChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+    google.visualization.events.addOneTimeListener(pieChart, 'ready', function () {
+        console.log("Age Range Pie Chart Generated");
+        chartURIs.push(pieChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+
+    //Age Range Graphs
+    columnChart.draw(ageRangeGraphDetails.column.data, ageRangeGraphDetails.column.options);
+    pieChart.draw(ageRangeGraphDetails.pie.data, ageRangeGraphDetails.pie.options);
+
+    google.visualization.events.addOneTimeListener(columnChart, 'ready', function () {
+        console.log("Relationship Status Column Chart Generated");
+        chartURIs.push(columnChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+    google.visualization.events.addOneTimeListener(pieChart, 'ready', function () {
+        console.log("Relationship Status Pie Chart Generated");
+        chartURIs.push(pieChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+
+    //Relationship Status Graphs
+    columnChart.draw(relationshipStatusGraphDetails.column.data, relationshipStatusGraphDetails.column.options);
+    pieChart.draw(relationshipStatusGraphDetails.pie.data, relationshipStatusGraphDetails.pie.options);
+
+    google.visualization.events.addOneTimeListener(columnChart, 'ready', function () {
+        console.log("Electoral Division Column Chart Generated");
+        chartURIs.push(columnChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+    google.visualization.events.addOneTimeListener(pieChart, 'ready', function () {
+        console.log("Electoral Division Pie Chart Generated");
+        chartURIs.push(pieChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+
+    //Electoral Division Graphs
+    columnChart.draw(electoralDivisionGraphDetails.column.data, electoralDivisionGraphDetails.column.options);
+    pieChart.draw(electoralDivisionGraphDetails.pie.data, electoralDivisionGraphDetails.pie.options);
+
+    google.visualization.events.addOneTimeListener(columnChart, 'ready', function () {
+        console.log("AAP Area Column Chart Generated");
+        chartURIs.push(columnChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+    google.visualization.events.addOneTimeListener(pieChart, 'ready', function () {
+        console.log("AAP Area Pie Chart Generated");
+        chartURIs.push(pieChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+
+    //AAP Area Graphs
+    columnChart.draw(aapAreaGraphDetails.column.data, aapAreaGraphDetails.column.options);
+    pieChart.draw(aapAreaGraphDetails.pie.data, aapAreaGraphDetails.pie.options);
+
+    google.visualization.events.addOneTimeListener(columnChart, 'ready', function () {
+        console.log("Mental Health Info Column Chart Generated");
+        chartURIs.push(columnChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+    google.visualization.events.addOneTimeListener(pieChart, 'ready', function () {
+        console.log("Mental Health Info Pie Chart Generated");
+        chartURIs.push(pieChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+
+    //Mental Health Info Graphs
+    columnChart.draw(mentalHealthInfoGraphDetails.column.data, mentalHealthInfoGraphDetails.column.options);
+    pieChart.draw(mentalHealthInfoGraphDetails.pie.data, mentalHealthInfoGraphDetails.pie.options);
+
+    google.visualization.events.addOneTimeListener(columnChart, 'ready', function () {
+        console.log("Referral Routes Column Chart Generated");
+        chartURIs.push(columnChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+
+    });
+    google.visualization.events.addOneTimeListener(pieChart, 'ready', function () {
+        console.log("Referral Routes Pie Chart Generated");
+        chartURIs.push(pieChart.getImageURI());
+        if(chartURIs.length == totalNumOfCharts){
+            genPDF(tableData, filterData, stats, chartURIs);
+        }
+    });
+
+    //Referral Routes
+    columnChart.draw(referralRouteGraphDetails.column.data, referralRouteGraphDetails.column.options);
+    pieChart.draw(referralRouteGraphDetails.pie.data, referralRouteGraphDetails.pie.options);
 
 }
 
-function genAgeRangeGraph(){
+function genAgeRangeGraphs(statData){
 
     /**
      * @param google
@@ -118,65 +248,519 @@ function genAgeRangeGraph(){
      * @param data.addRows
      */
 
-    var data = new google.visualization.DataTable();
-    data.addColumn('date', 'Month');
-    data.addColumn('number', 'Attendance');
+    var ageRangesFound = 0;
+    var statCount = 0;
+    var ageRanges = {};
+    while(ageRangesFound < NUM_AGE_RANGES){
+        if(statData[statCount].value != null) {
+            if (statData[statCount].name.db.split("_")[0] == "ageRange") {
+                ageRanges[statData[statCount].name.db] = statData[statCount].value;
+                ageRangesFound++;
+            }
+        }
+        statCount++;
+    }
 
-    data.addRows([
+    var columnData = new google.visualization.DataTable();
+    columnData.addColumn('number', 'Age Range');
+    columnData.addColumn('number', 'Number of Pals');
+
+    columnData.addRows([
         [{
-            v: new Date(2017, 0, 1),
-            f: "1st of Jan"
-        }, 1000],
+            v: 12,
+            f: "18-24"
+        }, ageRanges.ageRange_20.value],
         [{
-            v: new Date(2017, 1, 1),
-            f: "1st of Feb"
-        }, 2000],
+            v: 34,
+            f: "25-44"
+        }, ageRanges.ageRange_30.value],
         [{
-            v: new Date(2017, 2, 1),
-            f: "1st of March"
-        }, 1500],
+            v: 54,
+            f: "45-64"
+        }, ageRanges.ageRange_50.value],
         [{
-            v: new Date(2017, 3, 1),
-            f: "1st of April"
-        }, 2500]
+            v: 69,
+            f: "65-74"
+        }, ageRanges.ageRange_70.value],
+        [{
+            v: 80,
+            f: "75+"
+        }, ageRanges.ageRange_80.value]
+
     ]);
 
-    var options = {
-        title: 'Attendance per Month',
+    var columnOptions = {
+        title: 'Pals per Age Range',
         colors: ['#9575cd', '#33ac71'],
+        width: 1000,
+        height: 750,
         hAxis: {
-            title: 'Month',
-            //format: 'h:mm a',
-            viewWindow: {
-                min: new Date(2017, -1, 15),
-                max: new Date(2017, 3, 15)
-            }
+            //title: 'Age Range',
+            slantedText: true
+            //viewWindow: {min: 10, max: 100}
         },
         vAxis: {
-            title: 'Attendance'
+            title: 'Number of Pals'
         }
     };
 
-    return {data: data, options: options};
+    var pieData = google.visualization.arrayToDataTable([
+        ['AgeRange', 'Number of Pals'],
+        ['18-24', ageRanges.ageRange_20.value],
+        ['25-24', ageRanges.ageRange_30.value],
+        ['45-64', ageRanges.ageRange_50.value],
+        ['65-74', ageRanges.ageRange_70.value],
+        ['75+', ageRanges.ageRange_80.value]
+    ]);
+
+    var pieOptions = {
+        title: 'Pals per Age Range',
+        width: 1000,
+        height: 750
+    };
+
+    return {column: {data: columnData, options: columnOptions}, pie: {data: pieData, options: pieOptions}};
 }
 
-function genRelationshipStatusGraph(){
+function genRelationshipStatusGraphs(statData){
+
+    /**
+     * @param google
+     * @param google.visualization
+     * @param google.visualization.DataTable()
+     * @param data
+     * @param data.addColumn
+     * @param data.addRows
+     */
+
+    var relationshipStatusesFound = 0;
+    var statCount = 0;
+    var relationshipStatuses = {};
+    while(relationshipStatusesFound < NUM_RELATIONSHIP_STATUSES){
+        if(statData[statCount].value != null) {
+            var parts = statData[statCount].name.db.split("_");
+            if (parts[0] == "relationshipStatus") {
+                relationshipStatuses[parts[1]] = statData[statCount].value;
+                relationshipStatusesFound++;
+            }
+        }
+        statCount++;
+    }
+
+    var columnData = new google.visualization.DataTable();
+    columnData.addColumn('string', 'Relationship Status');
+    columnData.addColumn('number', 'Number of Pals');
+
+    columnData.addRows([
+        [{
+            v: "Married"
+        }, relationshipStatuses.married.value],
+        [{
+            v: "Living Together"
+        }, relationshipStatuses.livingTogether.value],
+        [{
+            v: "Single"
+        }, relationshipStatuses.single.value],
+        [{
+            v: "In A Relationship"
+        }, relationshipStatuses.inARelationship.value],
+        [{
+            v: "Living Alone"
+        }, relationshipStatuses.livingAlone.value],
+        [{
+            v: "Divorced"
+        }, relationshipStatuses.divorced.value],
+        [{
+            v: "Widowed"
+        }, relationshipStatuses.widowed.value]
+
+    ]);
+
+    var columnOptions = {
+        title: 'Pals per Relationship Status',
+        colors: ['#9575cd', '#33ac71'],
+        width: 1000,
+        height: 750,
+        hAxis: {
+            //title: 'Relationship Status',
+            slantedText: true
+            //viewWindow: {min: 10, max: 100}
+        },
+        vAxis: {
+            title: 'Number of Pals'
+        }
+    };
+
+    var pieData = google.visualization.arrayToDataTable([
+        ['Relationship Status', 'Number of Pals'],
+        ['Married', relationshipStatuses.married.value],
+        ['Living Together', relationshipStatuses.livingTogether.value],
+        ['Single', relationshipStatuses.single.value],
+        ['In A Relationship', relationshipStatuses.inARelationship.value],
+        ['Living Alone', relationshipStatuses.livingAlone.value],
+        ['Divorced', relationshipStatuses.divorced.value],
+        ['Widowed', relationshipStatuses.widowed.value]
+    ]);
+
+    var pieOptions = {
+        title: 'Pals per Relationship Status',
+        width: 1000,
+        height: 750
+    };
+
+    return {column: {data: columnData, options: columnOptions}, pie: {data: pieData, options: pieOptions}};
 
 }
 
-function genElectoralDivisionGraph(){
+function genElectoralDivisionGraphs(statData){
+
+    /**
+     * @param google
+     * @param google.visualization
+     * @param google.visualization.DataTable()
+     * @param data
+     * @param data.addColumn
+     * @param data.addRows
+     */
+
+    var divisionsFound = 0;
+    var statCount = 0;
+    var divisions = {};
+    while(divisionsFound < NUM_ELECTORAL_DIVISIONS){
+        if(statData[statCount].value != null) {
+            var parts = statData[statCount].name.db.split("_");
+            if (parts[0] == "geographic") {
+                if(parts[1] == "electoral" && parts[2] == "division") {
+                    divisions[statData[statCount].name.db] = {hr: statData[statCount].name.hr, value: statData[statCount].value};
+                    divisionsFound++;
+                }
+            }
+        }
+        statCount++;
+    }
+
+    var columnData = new google.visualization.DataTable();
+    columnData.addColumn('string', 'Division');
+    columnData.addColumn('number', 'Number of Pals');
+
+    var subColumnData = [];
+    var subPieData = [['Electoral Division', 'Number of Pals']];
+
+    Object.keys(divisions).forEach(function(division){
+        subColumnData.push(
+            [{
+                v: (divisions[division].hr).toString()
+            },
+                divisions[division].value
+            ]);
+        subPieData.push([divisions[division].hr, divisions[division].value]);
+    });
+
+    columnData.addRows(subColumnData);
+
+    var columnOptions = {
+        title: 'Pals per Electoral Division',
+        colors: ['#9575cd', '#33ac71'],
+        width: 1000,
+        height: 750,
+        hAxis: {
+            //title: 'Electoral Division',
+            slantedText: true
+            //viewWindow: {min: 0, max: 100}
+        },
+        vAxis: {
+            viewWindow: {min: 0},
+            title: 'Number of Pals'
+        }
+    };
+
+    var pieData = google.visualization.arrayToDataTable(subPieData);
+
+    var pieOptions = {
+        title: 'Pals per Electoral Division',
+        width: 1000,
+        height: 750
+    };
+
+    return {column: {data: columnData, options: columnOptions}, pie: {data: pieData, options: pieOptions}};
 
 }
 
-function genAAPAreaGraph(){
+function genAAPAreaGraphs(statData){
+
+    /**
+     * @param google
+     * @param google.visualization
+     * @param google.visualization.DataTable()
+     * @param data
+     * @param data.addColumn
+     * @param data.addRows
+     */
+
+    var areasFound = 0;
+    var statCount = 0;
+    var areas = {};
+    while(areasFound < NUM_AAP_AREAS){
+        if(statData[statCount].value != null) {
+            var parts = statData[statCount].name.db.split("_");
+            if (parts[0] == "geographic") {
+                if(parts[1] == "aap" && parts[2] == "area") {
+                    areas[statData[statCount].name.db] = {hr: statData[statCount].name.hr, value: statData[statCount].value};
+                    areasFound++;
+                }
+            }
+        }
+        statCount++;
+    }
+
+    var columnData = new google.visualization.DataTable();
+    columnData.addColumn('string', 'Area');
+    columnData.addColumn('number', 'Number of Pals');
+
+    var subColumnData = [];
+    var subPieData = [['AAP Area', 'Number of Pals']];
+
+    Object.keys(areas).forEach(function(area){
+        subColumnData.push(
+            [{
+                v: (areas[area].hr).toString()
+            },
+                areas[area].value
+            ]);
+        subPieData.push([areas[area].hr, areas[area].value]);
+    });
+
+    columnData.addRows(subColumnData);
+
+    var columnOptions = {
+        title: 'Pals per AAP Area',
+        colors: ['#9575cd', '#33ac71'],
+        width: 1000,
+        height: 750,
+        hAxis: {
+            //title: 'AAP Area',
+            slantedText: true
+            //viewWindow: {min: 0,max: 100}
+        },
+        vAxis: {
+            viewWindow: {min: 0},
+            title: 'Number of Pals'
+        }
+    };
+
+    var pieData = google.visualization.arrayToDataTable(subPieData);
+
+    var pieOptions = {
+        title: 'Pals per AAP Area',
+        width: 1000,
+        height: 750
+    };
+
+    return {column: {data: columnData, options: columnOptions}, pie: {data: pieData, options: pieOptions}};
 
 }
 
-function genMentalHealthInfoGraph(){
+function genMentalHealthInfoGraphs(statData){
+
+    /**
+     * @param google
+     * @param google.visualization
+     * @param google.visualization.DataTable()
+     * @param data
+     * @param data.addColumn
+     * @param data.addRows
+     */
+
+    var mentalHealthStatusesFound = 0;
+    var statCount = 0;
+    var mentalHealthStatuses = {};
+    while(mentalHealthStatusesFound < NUM_MENTAL_HEALTH_STATUSES){
+        if(statData[statCount].value != null) {
+            var parts = statData[statCount].name.db.split("_");
+            if (parts[0] == "mentalHealthInfo") {
+                mentalHealthStatuses[parts[1]] = statData[statCount].value;
+                mentalHealthStatusesFound++;
+            }
+        }
+        statCount++;
+    }
+
+    var columnData = new google.visualization.DataTable();
+    columnData.addColumn('string', 'Mental Health Status');
+    columnData.addColumn('number', 'Number of Pals');
+
+    columnData.addRows([
+        [{
+            v: "Anxiety"
+        }, mentalHealthStatuses.anxiety.value],
+        [{
+            v: "Bereavement"
+        }, mentalHealthStatuses.bereavement.value],
+        [{
+            v: "Depression"
+        }, mentalHealthStatuses.depression.value],
+        [{
+            v: "Eating Disorder"
+        }, mentalHealthStatuses.eatingDisorder.value],
+        [{
+            v: "Divorce"
+        }, mentalHealthStatuses.divorce.value],
+        [{
+            v: "Low Self Esteem"
+        }, mentalHealthStatuses.lowSelfEsteem.value],
+        [{
+            v: "Suicidal Thoughts"
+        }, mentalHealthStatuses.suicidalThoughts.value],
+        [{
+            v: "Self Harm"
+        }, mentalHealthStatuses.selfHarm.value],
+        [{
+            v: "Sleeping Difficulties"
+        }, mentalHealthStatuses.sleepingDifficulties.value],
+        [{
+            v: "Stress"
+        }, mentalHealthStatuses.stress.value],
+        [{
+            v: "Panic Attacks"
+        }, mentalHealthStatuses.panicAttacks.value],
+        [{
+            v: "Substance Misuse"
+        }, mentalHealthStatuses.substanceMisuse.value],
+        [{
+            v: "Addiction"
+        }, mentalHealthStatuses.addiction.value],
+        [{
+            v: "Attempted Suicide"
+        }, mentalHealthStatuses.attemptedSuicide.value]
+
+    ]);
+
+    var columnOptions = {
+        title: 'Pals per Mental Health Status',
+        colors: ['#9575cd', '#33ac71'],
+        width: 1000,
+        height: 750,
+        hAxis: {
+            //title: 'Mental Health Status',
+            slantedText: true
+            //viewWindow: {min: 10, max: 100}
+        },
+        vAxis: {
+            title: 'Number of Pals'
+        }
+    };
+
+    var pieData = google.visualization.arrayToDataTable([
+        ['Mental Status', 'Number of Pals'],
+        ['Anxiety', mentalHealthStatuses.anxiety.value],
+        ['Bereavement', mentalHealthStatuses.bereavement.value],
+        ['Depression', mentalHealthStatuses.depression.value],
+        ['Eating Disorder', mentalHealthStatuses.eatingDisorder.value],
+        ['Divorce', mentalHealthStatuses.divorce.value],
+        ['Low Self Esteem', mentalHealthStatuses.lowSelfEsteem.value],
+        ['Suicidal Thoughts', mentalHealthStatuses.suicidalThoughts.value],
+        ['Self Harm', mentalHealthStatuses.selfHarm.value],
+        ['Sleeping Difficulties', mentalHealthStatuses.sleepingDifficulties.value],
+        ['Stress', mentalHealthStatuses.stress.value],
+        ['Panic Attacks', mentalHealthStatuses.panicAttacks.value],
+        ['Substance Misuse', mentalHealthStatuses.substanceMisuse.value],
+        ['Addiction', mentalHealthStatuses.addiction.value],
+        ['Attempted Suicide', mentalHealthStatuses.attemptedSuicide.value]
+    ]);
+
+    var pieOptions = {
+        title: 'Pals per Mental Health Status',
+        width: 1000,
+        height: 750
+    };
+
+    return {column: {data: columnData, options: columnOptions}, pie: {data: pieData, options: pieOptions}};
 
 }
 
-function genReferralRouteGraph(){
+function genReferralRouteGraphs(statData){
+
+    /**
+     * @param google
+     * @param google.visualization
+     * @param google.visualization.DataTable()
+     * @param data
+     * @param data.addColumn
+     * @param data.addRows
+     */
+
+    var referralRoutesFound = 0;
+    var statCount = 0;
+    var referralRoutes = {};
+    while(referralRoutesFound < NUM_REFERRAL_ROUTES){
+        if(statData[statCount].value != null) {
+            var parts = statData[statCount].name.db.split("_");
+            if (parts[0] == "referral") {
+                referralRoutes[parts[1]] = statData[statCount].value;
+                referralRoutesFound++;
+            }
+        }
+        statCount++;
+    }
+
+    var columnData = new google.visualization.DataTable();
+    columnData.addColumn('string', 'Referral Route');
+    columnData.addColumn('number', 'Number of Pals');
+
+    columnData.addRows([
+        [{
+            v: "Public Health Service"
+        }, referralRoutes.publicHealth.value],
+        [{
+            v: "Council"
+        }, referralRoutes.council.value],
+        [{
+            v: "GP (General Practitioner)"
+        }, referralRoutes.gp.value],
+        [{
+            v: "NHS (National Health Service)"
+        }, referralRoutes.nhs.value],
+        [{
+            v: "Other"
+        }, referralRoutes.other.value],
+        [{
+            v: "Self"
+        }, referralRoutes.self.value]
+
+    ]);
+
+    var columnOptions = {
+        title: 'Pals per Referral Route',
+        colors: ['#9575cd', '#33ac71'],
+        width: 1000,
+        height: 750,
+        hAxis: {
+            //title: 'Referral Route',
+            slantedText: true
+            //viewWindow: {min: 10,max: 100}
+        },
+        vAxis: {
+            title: 'Number of Pals'
+        }
+    };
+
+    var pieData = google.visualization.arrayToDataTable([
+        ['Referral Route', 'Number of Pals'],
+        ['Public Health Service', referralRoutes.publicHealth.value],
+        ['Council', referralRoutes.council.value],
+        ['GP (General Practitioner)', referralRoutes.gp.value],
+        ['NHS (National Health Service)', referralRoutes.nhs.value],
+        ['Other', referralRoutes.other.value],
+        ['Self', referralRoutes.self.value]
+    ]);
+
+    var pieOptions = {
+        title: 'Pals per Referral Route',
+        width: 1000,
+        height: 750
+    };
+
+    return {column: {data: columnData, options: columnOptions}, pie: {data: pieData, options: pieOptions}};
 
 }
 
@@ -221,7 +805,7 @@ function statisticsList(database) {
     });
     statisticsList.push(subList);
 
-    return statisticsList;
+    return {list: statisticsList, data: statistics};
 }
 
 function statisticCalc(database) {
@@ -260,19 +844,17 @@ function statisticCalc(database) {
     var ethnicity = {white: 0, black: 0, asian: 0, chinese: 0, mixed: 0, other: 0};
     var employment = {inWork: 0, retired: 0, notWorking: 0, sickLeave: 0, education: 0, other: 0, benefits: 0};
     var healthInfo = {disability: 0, mental: 0, physical: 0};
-    var mentalHealthInfo = {anxiety: 0, bereavement: 0, depression: 0, eatingDisorder: 0, divorce: 0, lowSelfEsteem: 0, suicidalThoughts : 0, selfHarm :0, sleepingDifficulties: 0, stress: 0, panicAttacks: 0, drugMisuse: 0, addiction: 0, attemptedSuicide: 0};
+    var mentalHealthInfo = {anxiety: 0, bereavement: 0, depression: 0, eatingDisorder: 0, divorce: 0, lowSelfEsteem: 0, suicidalThoughts : 0, selfHarm :0, sleepingDifficulties: 0, stress: 0, panicAttacks: 0, substanceMisuse: 0, addiction: 0, attemptedSuicide: 0};
     var mentalHealthStatus = {diagnosed: 0, careCoordinator: 0};
     var referrals = {publicHealthService: 0, councilService: 0, gp: 0, nhs: 0, other: 0, self: 0};
     var isolation = {extraHelp: 0};
-    var geographic = {localAuthorityArea: 0, electoralDivision: 0, aapArea: 0, gpPractice: 0, middleLayerSuper: 0, lowerLayerSuper: 0};
-    geographic.localAuthorityArea = localAuthorityAreaList();
+    var geographic = {electoralDivision: 0, aapArea: 0, gpPractice: 0};
     geographic.electoralDivision = electoralDivisionList();
     geographic.aapArea = aapAreaList();
 
     database.forEach(function(entry){
 
         //Age Range
-        console.log(entry);
         if(entry.age <= 24 ){
             ageRanges.bracket20 += 1;
         } else if(entry.age <= 44){
@@ -360,12 +942,6 @@ function statisticCalc(database) {
         }
 
         //Geographic Data
-        //Local Authority Area
-        Object.keys(geographic.localAuthorityArea).forEach(function(area){
-            if(entry.local_authority_area == geographic.localAuthorityArea[area].hr){
-                geographic.localAuthorityArea[area].value += 1;
-            }
-        });
 
         //Electoral Division (Councillor Ward)
         Object.keys(geographic.electoralDivision).forEach(function(division){
@@ -383,20 +959,6 @@ function statisticCalc(database) {
 
         //GP Practice
         //TODO: Add GP Practices
-
-        //Middle Layer Super Output Area
-        Object.keys(geographic.middleLayerSuper).forEach(function(area){
-            if(entry.middle_layer_super_output_area == geographic.middleLayerSuper[area].hr){
-                geographic.middleLayerSuper[area].value += 1;
-            }
-        });
-
-        //Lower Layer Super Output Area
-        Object.keys(geographic.lowerLayerSuper).forEach(function(area){
-            if(entry.lower_layer_super_output_area == geographic.lowerLayerSuper[area].hr){
-                geographic.lowerLayerSuper[area].value += 1;
-            }
-        });
 
         //Health Info
         if(entry.disability == true){
@@ -475,6 +1037,8 @@ function statisticCalc(database) {
             referrals.nhs += 1;
         } else if(entry.referral == "Other"){
             referrals.other += 1;
+        } else if(entry.referral == "Self"){
+            referrals.self += 1;
         }
 
         //Isolation
@@ -503,10 +1067,10 @@ function statisticCalc(database) {
     //Relationship Statuses
     statistics.push({name: {db: "heading_relationshipStatus", hr: "Relationship Status of Pals"}, value: null});
     statistics.push({name: {db: "relationshipStatus_married", hr: "Married pals"}, value: relationship_status.married});
-    statistics.push({name: {db: "relationshipStatus_living_together", hr: "Pals living with someone"}, value: relationship_status.livingTogether});
+    statistics.push({name: {db: "relationshipStatus_livingTogether", hr: "Pals living with someone"}, value: relationship_status.livingTogether});
     statistics.push({name: {db: "relationshipStatus_single", hr: "Single Pals"}, value: relationship_status.single});
-    statistics.push({name: {db: "relationshipStatus_in_a_relationship", hr: "Pals in a relationship"}, value: relationship_status.inARelationship});
-    statistics.push({name: {db: "relationshipStatus_living_alone", hr: "Pals living alone"}, value: relationship_status.livingAlone});
+    statistics.push({name: {db: "relationshipStatus_inARelationship", hr: "Pals in a relationship"}, value: relationship_status.inARelationship});
+    statistics.push({name: {db: "relationshipStatus_livingAlone", hr: "Pals living alone"}, value: relationship_status.livingAlone});
     statistics.push({name: {db: "relationshipStatus_divorced", hr: "Divorced or separated Pals"}, value: relationship_status.divorced});
     statistics.push({name: {db: "relationshipStatus_widowed", hr: "Widowed Pals"}, value: relationship_status.widowed});
     //Sexuality
@@ -524,18 +1088,14 @@ function statisticCalc(database) {
     statistics.push({name: {db: "ethnicity_other", hr: "Other Pals"}, value: ethnicity.other});
     //Employment
     statistics.push({name: {db: "heading_employment", hr: "Employment Status of Pals"}, value: null});
-    statistics.push({name: {db: "employment_in_work", hr: "Pals in work"}, value: employment.inWork});
+    statistics.push({name: {db: "employment_inWork", hr: "Pals in work"}, value: employment.inWork});
     statistics.push({name: {db: "employment_retired", hr: "Retired Pals"}, value: employment.retired});
-    statistics.push({name: {db: "employment_not_working", hr: "Pals not working"}, value: employment.notWorking});
-    statistics.push({name: {db: "employment_sick_leave", hr: "Pals on sick leave"}, value: employment.sickLeave});
+    statistics.push({name: {db: "employment_notWorking", hr: "Pals not working"}, value: employment.notWorking});
+    statistics.push({name: {db: "employment_sickLeave", hr: "Pals on sick leave"}, value: employment.sickLeave});
     statistics.push({name: {db: "employment_education", hr: "Pals in education"}, value: employment.education});
     statistics.push({name: {db: "employment_other", hr: "Pals in other employment"}, value: employment.other});
     statistics.push({name: {db: "employment_benefits", hr: "Pals receiving benefits"}, value: employment.benefits});
     //Geographical Data
-    statistics.push({name: {db: "heading_local_authority_area", hr: "Pals who live in each local authority area"}, value: null});
-    Object.keys(geographic.localAuthorityArea).forEach(function(area){
-        statistics.push({name: {db: "geographic_local_authority_area_" + area, hr: geographic.localAuthorityArea[area].hr}, value: geographic.localAuthorityArea[area].value});
-    });
     statistics.push({name: {db: "heading_electoral_division", hr: "Pals who live in each electoral division"}, value: null});
     Object.keys(geographic.electoralDivision).forEach(function(division){
         statistics.push({name: {db: "geographic_electoral_division_" + division, hr: geographic.electoralDivision[division].hr}, value: geographic.electoralDivision[division].value});
@@ -543,14 +1103,6 @@ function statisticCalc(database) {
     statistics.push({name: {db: "heading_aap_area", hr: "Pals who live in each AAP Area"}, value: null});
     Object.keys(geographic.aapArea).forEach(function(area){
         statistics.push({name: {db: "geographic_aap_area_" + area, hr: geographic.aapArea[area].hr}, value: geographic.aapArea[area].value});
-    });
-    statistics.push({name: {db: "heading_lower_layer_super", hr: "Pals who live in each Lower Layer Super Output Area"}, value: null});
-    Object.keys(geographic.lowerLayerSuper).forEach(function(area){
-        statistics.push({name: {db: "geographic_lower_layer_super_" + area, hr: geographic.lowerLayerSuper[area].hr}, value: geographic.lowerLayerSuper[area].value});
-    });
-    statistics.push({name: {db: "heading_middle_layer_super", hr: "Pals who live in each Middle Layer Super Output Area"}, value: null});
-    Object.keys(geographic.middleLayerSuper).forEach(function(area){
-        statistics.push({name: {db: "geographic_middle_layer_super_" + area, hr: geographic.middleLayerSuper[area].hr}, value: geographic.middleLayerSuper[area].value});
     });
     //Health Info
     statistics.push({name: {db: "heading_healthInfo", hr: "Health Info of Pals"}, value: null});
@@ -560,26 +1112,26 @@ function statisticCalc(database) {
     //Mental Health Info
     statistics.push({name: {db: "heading_mentalHealthInfo", hr: "Mental Health Conditions of Pals"}, value: null});
     statistics.push({name: {db: "mentalHealthInfo_anxiety", hr: "Pals with Anxiety"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_bereavement", hr: "Pals suffering from bereavement/loss"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_depression", hr: "Pals with Depression"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_eating_issues", hr: "Pals with eating issues"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_divorce", hr: "Pals suffering with divorce"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_low_self_esteem", hr: "Pals with low self esteem"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_suicidal_thoughts", hr: "Pals with suicidal thoughts"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_self_harm", hr: "Pals who self harm"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_sleeping_difficulties", hr: "Pals that have difficulties with sleeping"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_stress", hr: "Pals suffering from stress"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_panic_attacks", hr: "Pals who suffer from panic attacks"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_substance_misuse", hr: "Pals that misuse substances"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_addiction", hr: "Pals that suffer from addiction"}, value: mentalHealthInfo.anxiety});
-    statistics.push({name: {db: "mentalHealthInfo_attempted_suicide", hr: "Pals that have attempted suicide in the past 12 months"}, value: mentalHealthInfo.anxiety});
+    statistics.push({name: {db: "mentalHealthInfo_bereavement", hr: "Pals suffering from bereavement/loss"}, value: mentalHealthInfo.bereavement});
+    statistics.push({name: {db: "mentalHealthInfo_depression", hr: "Pals with Depression"}, value: mentalHealthInfo.depression});
+    statistics.push({name: {db: "mentalHealthInfo_eatingDisorder", hr: "Pals with eating disorder"}, value: mentalHealthInfo.eatingDisorder});
+    statistics.push({name: {db: "mentalHealthInfo_divorce", hr: "Pals suffering with divorce"}, value: mentalHealthInfo.divorce});
+    statistics.push({name: {db: "mentalHealthInfo_lowSelfEsteem", hr: "Pals with low self esteem"}, value: mentalHealthInfo.lowSelfEsteem});
+    statistics.push({name: {db: "mentalHealthInfo_suicidalThoughts", hr: "Pals with suicidal thoughts"}, value: mentalHealthInfo.suicidalThoughts});
+    statistics.push({name: {db: "mentalHealthInfo_selfHarm", hr: "Pals who self harm"}, value: mentalHealthInfo.selfHarm});
+    statistics.push({name: {db: "mentalHealthInfo_sleepingDifficulties", hr: "Pals that have difficulties with sleeping"}, value: mentalHealthInfo.sleepingDifficulties});
+    statistics.push({name: {db: "mentalHealthInfo_stress", hr: "Pals suffering from stress"}, value: mentalHealthInfo.stress});
+    statistics.push({name: {db: "mentalHealthInfo_panicAttacks", hr: "Pals who suffer from panic attacks"}, value: mentalHealthInfo.panicAttacks});
+    statistics.push({name: {db: "mentalHealthInfo_substanceMisuse", hr: "Pals that misuse substances"}, value: mentalHealthInfo.substanceMisuse});
+    statistics.push({name: {db: "mentalHealthInfo_addiction", hr: "Pals that suffer from addiction"}, value: mentalHealthInfo.addiction});
+    statistics.push({name: {db: "mentalHealthInfo_attemptedSuicide", hr: "Pals that have attempted suicide in the past 12 months"}, value: mentalHealthInfo.attemptedSuicide});
     //Mental Health Status
     statistics.push({name: {db: "heading_mentalHealthStatus", hr: "Mental Health Status of Pals"}, value: null});
     statistics.push({name: {db: "mentalHealthStatus_diagnosed", hr: "Pals that have a diagnosed mental health condition"}, value: mentalHealthStatus.diagnosed});
-    statistics.push({name: {db: "mentalHealthStatus_care_coordinator", hr: "Pals with a care coordinator"}, value: mentalHealthStatus.careCoordinator});
+    statistics.push({name: {db: "mentalHealthStatus_careCoordinator", hr: "Pals with a care coordinator"}, value: mentalHealthStatus.careCoordinator});
     //Referrals
     statistics.push({name: {db: "heading_referral", hr: "How were Pals referred to RT"}, value: null});
-    statistics.push({name: {db: "referral_public_health", hr: "Pals that were referred by a public health service"}, value: referrals.publicHealthService});
+    statistics.push({name: {db: "referral_publicHealth", hr: "Pals that were referred by a public health service"}, value: referrals.publicHealthService});
     statistics.push({name: {db: "referral_council", hr: "Pals that were referred by a council service"}, value: referrals.publicHealthService});
     statistics.push({name: {db: "referral_gp", hr: "Pals that were referred by a/their GP"}, value: referrals.publicHealthService});
     statistics.push({name: {db: "referral_nhs", hr: "Pals that were referred by a NHS service"}, value: referrals.publicHealthService});
@@ -587,7 +1139,7 @@ function statisticCalc(database) {
     statistics.push({name: {db: "referral_self", hr: "Pals that weren't referred by anyone"}, value: referrals.self});
     //Isolation
     statistics.push({name: {db: "heading_isolation", hr: "Isolation details of Pals"}, value: null});
-    statistics.push({name: {db: "isolation_extra_help", hr: "Pals that are using extra help"}, value: isolation.extraHelp});
+    statistics.push({name: {db: "isolation_extraHelp", hr: "Pals that are using extra help"}, value: isolation.extraHelp});
 
     return statistics;
 
@@ -648,37 +1200,21 @@ function dateToDob(date){
     return dateParts[2] + " " + dateParts[1] + " " + dateParts[3];
 }
 
-function localAuthorityAreaList(){
-    var localAuthorityAreas = [
-
-    ];
-
-    var localAuthorityAreasAsObject = {};
-
-    var dbArea;
-    localAuthorityAreas.forEach(function(area){
-        dbArea = hrtodb(area);
-        localAuthorityAreasAsObject[dbArea] = {hr: area, value: 0};
-    });
-
-    return localAuthorityAreasAsObject;
-}
-
 function electoralDivisionList(){
     var electoralDivisions = [
-        "Annfield Plain", "Aycliffe East", "Aycliffe North and Midridge", "Aycliffe West",
-        "Barnard Castle East", "Barnard Castle West", "Belmont", "Benfieldside", "Bishop Auckland Town", "Bishop Middleham and Cornforth", "Blackhalls", "Brandon", "Burnopfield and Dipton",
-        "Chester-le-Street East", "Chester-le-Street North", "Chester-le-Street South", "Chester-le-Street West Central", "Chilton", "Consett North", "Consett South", "Coundon", "Coxhoe", "Craghead and South Moor", "Crook",
-        "Dawdon", "Deerness", "DelvesLane", "Deneside", "Durham South",
-        "Easington", "Elvet and Gilesgate", "Esh and Witton Gilbert", "Evenwood",
-        "Ferryhill", "Framwellgate and Newton Hall",
-        "Horden",
-        "Lanchester", "Leadgate and Medomsley", "Lumley",
-        "Murton", "Nevilles Cross", "North Lodge",
-        "Passfield", "Pelton", "Peterlee East", "Peterlee West",
-        "Sacriston", "Seaham", "Sedgefield", "Sherburn", "Shildon and Dene Valley", "Shotton South Hetton", "Spennymoor", "Stanley",
-        "Tanfield", "Tow Law", "Trimdon and Thornley", "Tudhoe",
-        "Weardale", "West Auckland", "Willington and Hunwick", "Wingate", "Woodhouse Close"
+        "Annfield Plain", "Aycliffe East", "Aycliffe North and Midridge", "Aycliffe West", //4
+        "Barnard Castle East", "Barnard Castle West", "Belmont", "Benfieldside", "Bishop Auckland Town", "Bishop Middleham and Cornforth", "Blackhalls", "Brandon", "Burnopfield and Dipton", //9 //13
+        "Chester-le-Street East", "Chester-le-Street North", "Chester-le-Street South", "Chester-le-Street West Central", "Chilton", "Consett North", "Consett South", "Coundon", "Coxhoe", "Craghead and South Moor", "Crook", //11 //24
+        "Dawdon", "Deerness", "DelvesLane", "Deneside", "Durham South", //5 //29
+        "Easington", "Elvet and Gilesgate", "Esh and Witton Gilbert", "Evenwood", //4 //33
+        "Ferryhill", "Framwellgate and Newton Hall", //2 //35
+        "Horden", //1 //36
+        "Lanchester", "Leadgate and Medomsley", "Lumley", //3 //39
+        "Murton", "Nevilles Cross", "North Lodge", //3 //42
+        "Passfield", "Pelton", "Peterlee East", "Peterlee West", //4 //46
+        "Sacriston", "Seaham", "Sedgefield", "Sherburn", "Shildon and Dene Valley", "Shotton South Hetton", "Spennymoor", "Stanley", //8 //54
+        "Tanfield", "Tow Law", "Trimdon and Thornley", "Tudhoe", //4 //58
+        "Weardale", "West Auckland", "Willington and Hunwick", "Wingate", "Woodhouse Close" //5 //63
     ];
 
     var electoralDivisionsAsObject = {};
@@ -703,7 +1239,7 @@ function aapAreaList(){
         "Mid Durham", "Great Aycliffe and Middridge Partnership",
         "Spennymoor", "Stanley",
         "Teesdale",
-        "Weardale"
+        "Weardale" //14
         ];
 
     var aapAreasAsObject = {};
@@ -715,38 +1251,6 @@ function aapAreaList(){
     });
 
     return aapAreasAsObject;
-}
-
-function lowerLayerSuperOutputAreaList(){
-    var lowerLayerSuperOutputAreas = [
-
-    ];
-
-    var lowerLayerSuperOutputAreasAsObject = {};
-
-    var dbArea;
-    lowerLayerSuperOutputAreas.forEach(function(area){
-        dbArea = hrtodb(area);
-        lowerLayerSuperOutputAreasAsObject[dbArea] = {hr: area, value: 0};
-    });
-
-    return lowerLayerSuperOutputAreasAsObject;
-}
-
-function middleLayerSuperOutputAreaList(){
-    var middleLayerSuperOutputAreas = [
-
-    ];
-
-    var middleLayerSuperOutputAreasAsObject = {};
-
-    var dbArea;
-    middleLayerSuperOutputAreas.forEach(function(area){
-        dbArea = hrtodb(area);
-        middleLayerSuperOutputAreasAsObject[dbArea] = {hr: area, value: 0};
-    });
-
-    return middleLayerSuperOutputAreasAsObject;
 }
 
 function hrtodb(hrName){
