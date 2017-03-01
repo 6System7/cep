@@ -100,7 +100,7 @@ function generateRows() {
     }
 }
 
-function refreshTableWithFilters(chosenDataset, filters = []) {
+function refreshTableWithFilters(chosenDataset, filters) {
     var tableHeadRow = $("#tHeadPalsRow");
     tableHeadRow.empty();
 
@@ -246,21 +246,23 @@ function refreshTable(chosenDataset) {
 }
 
 function matchesFilters(pal, filters) {
-    for (var i = 0; i < filters.length; i++) {
-        var filter = filters[i];
-        if (filter.type === "contains") {
-            if (!pal[filter.column.db].toLowerCase().includes(filter.value.toLowerCase())) {
-                return false;
-            }
-        } else if (filter.type === "range") {
-            if (filter.column.db === "dob" && pal[filter.column.db]) {
-                var xArray = filter.value.split("%")
-                var minAge = parseInt(xArray[0]);
-                var maxAge = parseInt(xArray[1]);
-                var ageDate = new Date(Date.now() - pal[filter.column.db].getTime()); // miliseconds from epoch
-                y = Math.abs(ageDate.getUTCFullYear() - 1970);
-                if (!(y >= minAge && y <= maxAge)) {
+    if (filters) {
+        for (var i = 0; i < filters.length; i++) {
+            var filter = filters[i];
+            if (filter.type === "contains") {
+                if (!pal[filter.column.db].toLowerCase().includes(filter.value.toLowerCase())) {
                     return false;
+                }
+            } else if (filter.type === "range") {
+                if (filter.column.db === "dob" && pal[filter.column.db]) {
+                    var xArray = filter.value.split("%")
+                    var minAge = parseInt(xArray[0]);
+                    var maxAge = parseInt(xArray[1]);
+                    var ageDate = new Date(Date.now() - pal[filter.column.db].getTime()); // miliseconds from epoch
+                    y = Math.abs(ageDate.getUTCFullYear() - 1970);
+                    if (!(y >= minAge && y <= maxAge)) {
+                        return false;
+                    }
                 }
             }
         }
