@@ -29,11 +29,15 @@ $(document).ready(function() {
     });
 
     $("#checkAllPersonal").change(function() {
-        $("#personalDataCheckboxes input:checkbox").prop('checked', $(this).prop("checked"));
+        $("#personalDataCheckboxes input:checkbox").prop("checked", $(this).prop("checked"));
     });
 
+    $("#checkAllCare").change(function() {
+        $("#careCheckboxes input:checkbox").prop("checked", $(this).prop("checked"));
+    })
+
     $("#checkAllOther").change(function() {
-        $("#othercheckboxes input:checkbox").prop('checked', $(this).prop("checked"));
+        $("#othercheckboxes input:checkbox").prop("checked", $(this).prop("checked"));
     });
 
 });
@@ -66,7 +70,9 @@ function generateRows() {
             var elem = $("<td>");
             if (columns[columnIndex].db) {
                 var column = columns[columnIndex].db;
-                if (filteredDataset.pals[palIndex][column]) {
+                if (column == "disability" || column == "extra_help") {
+                    elem.text(filteredDataset.pals[palIndex][column] ? "yes" : "no")
+                } else if (filteredDataset.pals[palIndex][column]) {
                     if (column == "dob") {
                         var dobString = pal.dob.getUTCFullYear() + "/" + (1 + pal.dob.getUTCMonth()) + "/" + pal.dob.getDate();
                         elem.text(dobString);
@@ -184,6 +190,27 @@ function refreshTable(chosenDataset) {
             hr: chkDOB.value
         });
     }
+    var chkGender = $("#chkGender")[0];
+    if (chkGender.checked) {
+        columns.push({
+            db: "gender",
+            hr: chkGender.value
+        })
+    }
+    var chkDisability = $("#chkDisability")[0];
+    if (chkDisability.checked) {
+        columns.push({
+            db: "disability",
+            hr: chkDisability.value
+        })
+    }
+    var chkExtraHelp = $("#chkExtraHelp")[0];
+    if (chkExtraHelp.checked) {
+        columns.push({
+            db: "extra_help",
+            hr: chkExtraHelp.value
+        })
+    }
 
     // Always go last because it's the edit button --> goes on end.
     var chkEdit = $("#chkEdit")[0];
@@ -221,17 +248,17 @@ function refreshTable(chosenDataset) {
         });
     }
 
-    var chkProfessionallyDiagnosed = $("#chkProfessionallyDiagnosed")[0];
-    if (chkProfessionallyDiagnosed.checked) {
+    var chkHasDisability = $("#fltrDisability")[0];
+    if (chkHasDisability.checked) {
         filters.push({
             column: {
-                db: "professionallyDiagnosed", // TODO what is this actually called in db? Is it one column or one per condition?
-                hr: "Professionally Diagnosed"
+                db: "disability",
+                hr: "Disability"
             },
             type: "equals",
             value: true
         });
-    };
+    }
 
     filters.push({
         column: {
@@ -263,6 +290,10 @@ function matchesFilters(pal, filters) {
                     if (!(y >= minAge && y <= maxAge)) {
                         return false;
                     }
+                }
+            } else if (filter.type === "equals") {
+                if (!pal[filter.column.db] == filter.value) {
+                    return false;
                 }
             }
         }
@@ -336,32 +367,6 @@ function loadAllPals() {
     });
 }
 
-// var x = new Date(1971, 08, 22)
-// var xx = new Date(1981, 08, 22)
-//xx = xx.toLocaleDateString();
-// var dataset = {
-//
-//  pals: [{
-//         id: 0,
-//         firstName: "Maddy",
-//         lastName: "Sands",
-//         email: "hereareyour@oa.ts",
-//         dob: x
-//     }, {
-//         id: 1,
-//         firstName: "Mike",
-//         lastName: "Croall",
-//         email: "brothermayihavesome@oa.ts",
-//         dob: x
-//
-//     }, {
-//         id: 2,
-//         firstName: "John",
-//         lastName: "Doe",
-//         email: "john@doe.zz.vc",
-//         dob: xx
-//     }]
-// };
 var dataset = {
     pals: []
 };
@@ -369,3 +374,11 @@ var dataset = {
 var filteredDataset = {
     pals: []
 };
+
+// TODO TODO TODO TODO TODO TODO
+
+// Columns (and column groups) not yet implemented
+// Projects, Emergency Contacts, gp, conditions, consent
+// and everything else below carer in Database Documents Format v2.txt
+
+// Filters also to be added when we have confirmed which are NEEDED and which would just 'be nice to have'
