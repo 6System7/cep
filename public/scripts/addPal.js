@@ -68,7 +68,7 @@ function deletePalFunc() {
         contentType: 'application/json',
         dataType: "json",
         data: JSON.stringify({
-            pals: [pal]
+            id: pal._id
         })
     }).always(function() {
         window.parent.loadAllPals();
