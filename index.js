@@ -148,7 +148,7 @@ app.post('/delPal',
     function(req, res) {
         //Takes an id belonging to a PAL in the database and deletes it
         //Get the required parameters
-        var id = req.body.id;
+        var id = require('mongodb').ObjectId(req.body.id);
         var collection = db.collection('pals');
         db.collection('pals').deleteOne({_id: id}, function(err, results) {
             if (err){
