@@ -112,7 +112,6 @@ app.post('/addPal',
         //Simply insert the dataset into the collection
         var collection = db.collection('pals');
         for (index in dataset) {
-            console.log("Saving", index);
             collection.save(dataset[index], function(err, results) {
                 if (err) {
                     console.log("Update failed: " + err.toString());
@@ -128,7 +127,7 @@ app.post('/addPal',
 app.get('/getPal',
     //connectEnsure.ensureLoggedIn('/login'),
     function(req, res) {
-        //Takes a function as input and calls it with a list of all PALs in the database as a parameter
+        //Takes no input, retrieves a list of all PALs in the database and sends them back
         //TODO
         //Get the PALs
         var collection = db.collection('pals');
@@ -139,6 +138,25 @@ app.get('/getPal',
                 console.log("Retrieval success");
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify(result));
+            }
+        });
+    }
+)
+
+app.post('/delPal',
+    //connectEnsure.ensureLoggedIn('/login'),
+    function(req, res) {
+        //Takes an id belonging to a PAL in the database and deletes it
+        //Get the required parameters
+        var id = req.body.id;
+        var collection = db.collection('pals');
+        db.collection('pals').deleteOne({_id: id}, function(err, results) {
+            if (err){
+                console.log("Deletion failed: " + err.toString());
+                res.send('fail');
+            } else {
+                console.log("Deletion success");
+                res.send('success');
             }
         });
     }
