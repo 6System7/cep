@@ -41,10 +41,120 @@
                 <div class="checkbox">
                     <label><input id="chkExtraHelp" type="checkbox" value="">Extra help</label>
                 </div>
+                <div class="checkbox">
+                    <label><input id="chkExtraHelp" type="checkbox" value="">Professionally diagnosed</label>
+                </div>
             </div>
+             <div class="form-group">
+                <label for="borough">Borough:</label>
+                <input class="form-control" id="borough" placeholder="Enter borough" required="true">
+            </div>
+            <div class="form-group">
+                <label for="gpPractice">GP Practice:</label>
+                <input class="form-control" id="gpPractice" placeholder="Enter GP Practice" required="true">
+            </div>
+            <div class="form-group">
+              <label for="selectRelationship">Relationship status</label>
+              <select class="form-control" id="selectRelationship">
+                <option>Married</option>
+                <option>Living together</option>
+                <option>Single</option>
+                <option>In a relationsip</option>
+                <option>Living alone</option>
+                <option>Divorced/separated</option>
+                <option>Widowed</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="selectSexualOri">Sexual orientation</label>
+              <select class="form-control" id="selectSexualOri">
+                <option>LGBT</option>
+                <option>Straight</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="selectEthnicity">Ethnic origin </label>
+              <select class="form-control" id="selectEthnicity">
+                <option>White</option>
+                <option>Black</option>
+                <option>Asian</option>
+                <option>Chinese</option>
+                <option>Mixed</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="selectEmployment">Employment status </label>
+              <select class="form-control" id="selectEmployment">
+                <option>In work</option>
+                <option>Retired</option>
+                <option>Not currently working</option>
+                <option>On sick leave</option>
+                <option>In education or training</option>
+                <option>Other</option>
+                <option>In receipt of benefit</option>
+              </select>
+            </div>
+            <div class="form-group" id = "healthInfoCheckboxes">
+                <label for = "healthInfoCheckboxes"> Health Information</label>
+                <div class="checkbox">
+                    <label><input id="chkExtraHelp" type="checkbox" value="">Mental health condition</label>
+                </div>
+                <div class="checkbox">
+                    <label><input id="chkExtraHelp" type="checkbox" value="">Physical health condition</label>
+                </div>
+                <div class="checkbox">
+                    <label><input id="chkExtraHelp" type="checkbox" value="">Disability</label>
+                </div>
+            </div>
+            <div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label class="checkbox-inline"><input type="checkbox" value="">Anxiety</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Bereavement/Loss</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Depression</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Eating issues</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Divorce/Separation</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Low self esteem</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Suicidal thoughts</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Self harm</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Sleeping difficulties</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Stress</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Panic attacks</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Substance misuse</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Addiction</label>
+                    <label class="checkbox-inline"><input type="checkbox" value="">Attempted suicide in last 12 mongths</label>
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="selectEmployment">Status in mental health service </label>
+              <select class="form-control" id="selectEmployment">
+                <option>Medical diagnosis of MH condition</option>
+                <option>Care coordinator</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="selectEmployment">Referral route </label>
+              <select class="form-control" id="selectEmployment">
+                <option>Public health service</option>
+                <option>Council service</option>
+                <option>GP</option>
+                <option>NHS service</option>
+                <option>Other</option>
+                <option>Isolation</option>
+              </select>
+            </div>
+                
+  
+            </div>
+        
+
 
             <button type="submit" class="btn btn-default" id="addPalBtn" onclick="submitFunc()">Submit</button>
             <button type="button" class="btn btn-warning" id="deletePalBtn" data-toggle="modal" data-target="#confirmationModal" style="float: right"> Delete</button>
+            <br>
+            <br>
 
             <!-- TODO delete button css -->
             <div id="confirmationModal" class="modal fade" role="disalog">

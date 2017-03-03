@@ -125,7 +125,32 @@ body {
 .modal-body {
     background-color: #7A1211;
     color: white;
+
+   
 }
+.modal{
+  width: 90%; /* desired relative width */
+  min-height:80%;
+  left: 5%; /* (100%-width)/2 */
+  margin: auto auto auto auto; /* place center */}
+
+.modal-body{
+    overflow-y:scroll;
+    max-height:none;
+    min-height:580px;
+    position:absolute;
+    top:50px;
+    bottom:50px;
+    right:0px;
+    left:0px;}
+
+.modal-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+} 
+
 
 .close {
     color: white;

@@ -114,6 +114,24 @@ body {
     color: white;
 }
 
+.modal-body{
+    overflow-y:scroll;
+    max-height:none;
+    min-height:580px;
+    position:absolute;
+    top:50px;
+    bottom:50px;
+    right:0px;
+    left:0px;}
+
+.modal-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+} 
+
+
 .close {
     color: white;
     opacity: 1;
